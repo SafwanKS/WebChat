@@ -17,6 +17,11 @@ window.onload = function() {
 
     class WEB_CHAT {
 
+        constructor() {
+
+            this.userColor = null;
+        }
+
         splash() {
 
             document.body.innerHTML = ''
@@ -76,6 +81,49 @@ window.onload = function() {
 
             join_btn.innerHTML = 'Join'
 
+            const colorCodes = ["#8B0000",
+                // Deep Red
+                "#006400",
+                // Deep Green
+                "#00008B",
+                // Deep Blue
+                "#8B8B00",
+                // Deep Yellow
+                "#8B4500",
+                // Deep Orange
+                "#4B0082",
+                // Deep Purple
+                "#008B8B",
+                // Deep Cyan
+                "#8B008B",
+                // Deep Magenta
+                "#228B22",
+                // Forest Green
+                "#800000",
+                // Maroon
+                "#0055FF",
+                // Deep Sky Blue
+                "#8B4789",
+                // Dark Orchid
+                "#DAA520",
+                // Goldenrod
+                "#E9967A",
+                // Dark Salmon
+                "#4169E1",
+                // Royal Blue
+                "#3CB371",
+                // Medium Sea Green
+                "#008B8B",
+                // Dark Teal
+                "#CD5C5C",
+                // Indian Red
+                "#A0522D",
+                // Sienna
+                "#2F4F4F"];
+            var randomIndex = Math.floor(Math.random() * colorCodes.length);
+            this.userColor = colorCodes[randomIndex];
+
+
             inputName.onkeyup = function() {
 
                 if (inputName.value.length > 0) {
@@ -85,6 +133,10 @@ window.onload = function() {
                     join_btn.onclick = function() {
 
                         parent.save_name(inputName.value)
+                        parent.save_color(parent.userColor);
+
+                        console.log(parent.userColor);
+
 
                         location.reload()
 
@@ -151,6 +203,10 @@ window.onload = function() {
             var profile = document.createElement('i')
 
             profile.classList.add('gg-profile')
+
+            accName.style.color = this.get_color();
+
+            accName.style.fontWeight = '800'
 
             aboutDiv.appendChild(logo)
 
@@ -303,6 +359,13 @@ window.onload = function() {
 
         }
 
+        save_color(color) {
+            localStorage.setItem('color', color);
+        }
+
+        get_color() {
+            return localStorage.getItem('color');
+        }
 
 
         send_message(message) {
@@ -324,6 +387,8 @@ window.onload = function() {
                     name: parent.get_name(),
 
                     message: message,
+                    
+                    color: parent.get_color(),
 
                     index: index
 
@@ -430,6 +495,8 @@ window.onload = function() {
                     var name = data.name
 
                     var message = data.message
+                    
+                    var color = data.color
 
 
                     var message_container = document.createElement('div')
@@ -456,6 +523,8 @@ window.onload = function() {
                         'message_user')
 
                     message_user.textContent = `${name}`
+                    
+                    message_user.style.color = color
 
 
                     var message_content_container = document.createElement('div')
@@ -486,10 +555,10 @@ window.onload = function() {
 
                 });
 
-    
-                
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight + 20;
-                
+
+
+                messagesDiv.scrollTop = messagesDiv.scrollHeight + 20;
+
             })
 
 
