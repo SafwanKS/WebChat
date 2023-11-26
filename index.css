@@ -21,6 +21,7 @@ body {
 #logoImg {
     width: 80px;
     height: 80px;
+    margin: auto;
 }
 #welcomeScreen {
     width: 100%;
