@@ -1,5 +1,28 @@
 window.onload = function() {
 
+    navigator.serviceWorker.register('/service-worker.js')
+    .then(registration => {
+        console.log('Service Worker registered with scope:', registration.scope);
+    })
+    .catch(error => {
+        console.error('Service Worker registration failed:', error);
+    });
+
+
+    async function registerServiceWorker() {
+        try {
+            const registration = await navigator.serviceWorker.register('/service-worker.js');
+            console.log('Service Worker registered with scope:', registration.scope);
+        } catch (error) {
+            console.error('Service Worker registration failed:', error);
+        }
+    }
+
+    if ('serviceWorker' in navigator) {
+        registerServiceWorker();
+    }
+
+
     var firebaseConfig = {
         apiKey: "AIzaSyDo-vaJSbBn4VBybTDtuqxdGUE_Bz5pgz4",
         authDomain: "webchat-7adb2.firebaseapp.com",
@@ -190,6 +213,20 @@ window.onload = function() {
 
             logo.setAttribute('id', 'logo')
 
+            var installAppBtn = document.createElement('div')
+
+            installAppBtn.setAttribute('id', 'installAppBtn')
+
+            var installTxt = document.createElement('p')
+
+            installTxt.setAttribute('id', 'installTxt')
+
+            installTxt.innerHTML = 'Install App'
+
+            installAppBtn.onclick = function() {
+                app.installApp();
+            };
+
             var accInfo = document.createElement('div')
 
             accInfo.setAttribute('id', 'accInfo')
@@ -211,6 +248,10 @@ window.onload = function() {
             aboutDiv.appendChild(logo)
 
             aboutDiv.appendChild(span)
+
+            aboutDiv.appendChild(installAppBtn)
+
+            installAppBtn.appendChild(installTxt)
 
             accInfo.appendChild(profile)
 
@@ -387,7 +428,7 @@ window.onload = function() {
                     name: parent.get_name(),
 
                     message: message,
-                    
+
                     color: parent.get_color(),
 
                     index: index
@@ -405,6 +446,17 @@ window.onload = function() {
             })
 
         }
+        installApp() {
+
+            if (navigator && navigator.serviceWorker) {
+                navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch(function(error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+            }
+        }
+
 
         refresh_chat() {
 
@@ -495,7 +547,7 @@ window.onload = function() {
                     var name = data.name
 
                     var message = data.message
-                    
+
                     var color = data.color
 
 
@@ -523,7 +575,7 @@ window.onload = function() {
                         'message_user')
 
                     message_user.textContent = `${name}`
-                    
+
                     message_user.style.color = color
 
 
