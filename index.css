@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+html{
+    scroll-behaviour: smooth;
+    font-family: 'Josefin Sans', sans-serif;
+}
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+#splashScreen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+#logoImg {
+    width: 80px;
+    height: 80px;
+}
+#welcomeScreen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+#inputName {
+    height: 50px;
+    outline: none;
+    border: 1px solid grey;
+    border-radius: 30px;;
+    transition: border-color 0.3s;
+    width: 300px;
+    padding-left: 10px;
+    font-size: 17px;
+}
+#inputName:focus {
+    border-color: #2096F3;
+}
+button {
+    width: 100px;
+    height: 50px;
+    border: 0;
+    border-radius: 30px;
+    background: skyblue;
+    margin-top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    outline: none;
+}
+button:hover {
+    background: white;
+    color: #2096F3;
+    border: 1px solid #2096F3;
+}
+.active {
+    background: #2096F3;
+}
+#aboutDiv {
+    height: 50px;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    position: fixed;
+}
+#messagesDiv {
+    width: 100%;
+    height: calc(100vh - 105px);
+    background: #fff;
+    padding-top: 35px;
+    padding-left: 10px;
+    overflow-y: auto;
+    padding-bottom: 45px;
+    padding-right: 10px;
+}
+#inputDiv {
+    width: 100%;
+    height: 55px;
+    background: #fff;
+    position:fixed;
+    bottom: 0;
+    display: flex;
+
+}
+#aboutDiv #logo {
+    width: 45px;
+    height: 45px;
+    margin-left: 10px;
+}
+#aboutDiv span {
+    flex: 1;
+}
+#accInfo {
+    min-width: 80px;
+    max-width: 200px;
+    height: 40px;
+    background: #f1f1f1;
+    border: 0;
+    border-radius: 25px;
+    cursor: pointer;
+    outline: none;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+#accInfo p {
+    font-size: 16px;
+    margin-left: 5px;
+}
+#accInfo i {
+    font-size: 16px;
+}
+#inputTextBack {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    width: 70%;
+
+}
+
+#iconsDivBack {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 10px;
+    width: 30%;
+}
+.sendBtnBack {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 30px;
+    background: skyblue;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#uploadBtn {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 30px;
+    background: #f1f1f1;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+}
+
+.material-icons {
+    color: white;
+    font-size: 25px;
+}
+#msgInput {
+    height: 45px;
+    outline: none;
+    border: 2px solid grey;
+    border-radius: 30px;;
+    transition: border-color 0.3s;
+    width: 100%;
+    padding-left: 10px;
+    font-size: 17px;
+}
+#msgInput:focus {
+    border-color: #2096F3;
+}
+.activeBtn {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 30px;
+    background: #2096F3;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.message_container{
+
+  width: 100%;
+
+  display: inline-block;
+  
+  margin-bottom: 0px;
+ 
+
+
+}
+
+.message_inner_container{
+
+  width: 100%;
+
+  display: inline-block;
+
+
+  color: #1D3354;
+
+}
+
+.message_user_container{
+
+  width: 100%;
+
+  display: inline-block;
+
+}
+
+.message_user{
+
+  font-weight: bold;
+
+  font-size: 14px;
+
+}
+
+.message_content_container{
+
+  width: 100%;
+
+  display: inline-block;
+
+
+  white-space: pre-wrap;
+
+  word-wrap: break-word;
+
+}
+
+.message_content{
+
+  font-weight: normal;
+
+  font-size: 14px;
+
+  margin-top: 5px;
+
+}
+
+
+@media only screen and (min-width: 768px) {
+    #inputDiv {
+        width: 100%;
+    }
+    #inputTextBack {
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+        width: 88%;
+    }
+
+    #iconsDivBack {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 10px;
+        width: 12%;
+    }
+}
+
