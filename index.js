@@ -15,18 +15,35 @@ window.onload = function() {
     firebase.initializeApp(firebaseConfig);
 
     var db = firebase.database()
-    
+
     var userTheme;
 
     class WEB_CHAT {
 
+
+
         constructor() {
 
             this.userColor = null;
-            
-            
-            
-            
+
+            this.stylesheet = document.createElement('link');
+
+            this.stylesheet.setAttribute('rel', 'stylesheet');
+
+            document.head.appendChild(this.stylesheet);
+
+            var appl = this.get_theme();
+
+            if (appl == 'dark') {
+
+                this.stylesheet.href = 'dark-theme.css';
+
+            } else {
+
+                this.stylesheet.href = 'index.css';
+
+            }
+
         }
 
         splash() {
@@ -140,9 +157,9 @@ window.onload = function() {
                     join_btn.onclick = function() {
 
                         parent.save_name(inputName.value)
-                        
+
                         parent.save_color(parent.userColor);
-                        
+
                         parent.save_theme('light')
 
                         console.log(parent.userColor);
@@ -187,12 +204,8 @@ window.onload = function() {
             this.refresh_chat()
 
         }
-        
-        profile(){
-            
-            
-            
-        }
+
+        profile() {}
 
         info() {
 
@@ -205,28 +218,58 @@ window.onload = function() {
             logo.setAttribute('src', 'logo.png')
 
             logo.setAttribute('id', 'logo')
-            
+
             var modeBack = document.createElement('div')
-            
+
             modeBack.setAttribute('class', 'modeBack')
-            
+
             var displayMode = document.createElement('i')
-            
+
             displayMode.setAttribute('class', 'material-symbols-outlined')
-            
+
             var userTheme = this.get_theme()
-            
-            if(userTheme == 'light'){
-                
+
+            if (userTheme == 'light') {
+
                 displayMode.innerHTML = 'dark_mode'
-                
-            }else{
-                
+
+            } else {
+
                 displayMode.innerHTML = 'light_mode'
-                
+
             }
 
-            
+            modeBack.onclick = () => {
+
+                if (userTheme == 'light') {
+
+                    this.save_theme('dark')
+
+                    userTheme = 'dark'
+
+                    displayMode.innerHTML = 'light_mode'
+
+                    this.stylesheet.href = 'dark-theme.css'
+
+                    this.refresh_chat()
+
+                } else {
+
+                    this.save_theme('light')
+
+                    userTheme = 'light'
+
+                    displayMode.innerHTML = 'dark_mode'
+
+                    this.stylesheet.href = 'index.css'
+
+                    this.refresh_chat()
+
+                }
+
+            }
+
+
 
             var accInfo = document.createElement('div')
 
@@ -249,9 +292,9 @@ window.onload = function() {
             aboutDiv.appendChild(logo)
 
             aboutDiv.appendChild(span)
-            
+
             aboutDiv.appendChild(modeBack)
-            
+
             modeBack.appendChild(displayMode)
 
             accInfo.appendChild(profile)
@@ -316,7 +359,7 @@ window.onload = function() {
 
             var sendIcon = document.createElement('i')
 
-            sendIcon.setAttribute('id', sendIcon)
+            sendIcon.setAttribute('id', 'sendIcon')
 
             sendIcon.classList.add('material-icons')
 
@@ -345,21 +388,21 @@ window.onload = function() {
                 if (clickable == true) {
 
                     sendBtn.onclick = function() {
-                        
-                        if(msgInput.value.length > 0){
-                            
+
+                        if (msgInput.value.length > 0) {
+
                             parent.send_message(msgInput.value)
 
-                        msgInput.value = ''
+                            msgInput.value = ''
 
-                        sendBtn.classList.remove('activeBtn')
+                            sendBtn.classList.remove('activeBtn')
 
-                        sendBtn.classList.add('sendBtnBack')
+                            sendBtn.classList.add('sendBtnBack')
 
-                            
+
                         }
 
-                        
+
                     }
 
                 }
@@ -385,8 +428,8 @@ window.onload = function() {
 
 
         }
-        
-        
+
+
 
         get_name() {
 
@@ -410,39 +453,46 @@ window.onload = function() {
         }
 
         save_color(color) {
-            
+
             localStorage.setItem('color', color);
-            
+
         }
 
         get_color() {
-            
+
             return localStorage.getItem('color');
-            
+
         }
-        
-        save_theme(theme){
-            
+
+        save_theme(theme) {
+
             localStorage.setItem('theme', theme)
-            
+
         }
-        
-        get_theme(){
-            
-            return localStorage.getItem('theme')
-            
+
+        get_theme() {
+
+            if (localStorage.getItem('theme') != null) {
+
+                return localStorage.getItem('theme')
+
+            } else {
+
+                return 'light'
+
+            }
         }
-        
-        set_profile(link){
-            
+
+        set_profile(link) {
+
             localStorage.setItem('profileLink', link)
-            
+
         }
-        
-        get_profile(){
-            
+
+        get_profile() {
+
             return localStorage.getItem('profileLink')
-            
+
         }
 
 
@@ -483,8 +533,8 @@ window.onload = function() {
             })
 
         }
-        
-        
+
+
 
 
 
@@ -604,68 +654,138 @@ window.onload = function() {
                     message_user.setAttribute('class',
                         'message_user')
 
-                    message_user.textContent = `${name}`
+                    message_user.innerText = name;
 
-                    message_user.style.color = color
+                    if (localStorage.getItem('theme') == 'dark') {
+
+                        switch (color) {
+                            case '#8B0000':
+                                color = '#FF0000';
+                                break;
+                            case '#006400':
+                                color = '#00FF00';
+                                break;
+                            case '#00008B':
+                                color = '#0000FF';
+                                break;
+                            case '#8B8B00':
+                                color = '#FFFF00';
+                                break;
+                            case '#8B4500':
+                                color = '#FFA500';
+                                break;
+                            case '#4B0082':
+                                color = '#8A2BE2';
+                                break;
+                            case '#800000':
+                                color = '#00CED1';
+                                break;
+                            case '#008B8B':
+                                color = '#FF00FF';
+                                break;
+                            case '#8B008B':
+                                color = '#228B22';
+                                break;
+                            case '#228B22':
+                                color = '#800000';
+                                break;
+                            case '#0055FF':
+                                color = '#00BFFF';
+                                break;
+                            case '#8B4789':
+                                color = '#9932CC';
+                                break;
+                            case '#DAA520':
+                                color = '#DAA520';
+                                break;
+                            case '#E9967A':
+                                color = '#E9967A';
+                                break;
+                            case '#4169E1':
+                                color = '#4169E1';
+                                break;
+                            case '#3CB371':
+                                color = '#3CB371';
+                                break;
+                            case '#008B8B':
+                                color = '#008080';
+                                break;
+                            case '#CD5C5C':
+                                color = '#CD5C5C';
+                                break;
+                            case '#A0522D':
+                                color = '#A0522D';
+                                break;
+                            case '#2F4F4F':
+                                color = '#556B2F';
+                                break;
+                            default:
+                                color = "#ffffff";
+                            }
+
+                        }
 
 
-                    var message_content_container = document.createElement('div')
 
-                    message_content_container.setAttribute('class',
-                        'message_content_container')
+                        message_user.style.color = color
 
+                        var message_content_container = document.createElement('div')
 
-                    var message_content = document.createElement('p')
-
-                    message_content.setAttribute('class',
-                        'message_content')
-
-                    message_content.textContent = `${message}`
+                        message_content_container.setAttribute('class',
+                            'message_content_container')
 
 
-                    message_user_container.append(message_user)
+                        var message_content = document.createElement('p')
 
-                    message_content_container.append(message_content)
+                        message_content.setAttribute('class',
+                            'message_content')
 
-                    message_inner_container.append(message_user_container,
-                        message_content_container)
-
-                    message_container.append(message_inner_container)
+                        message_content.innerText = message;
 
 
-                    messagesDiv.append(message_container)
+                        message_user_container.append(message_user)
 
-                });
+                        message_content_container.append(message_content)
+
+                        message_inner_container.append(message_user_container,
+                            message_content_container)
+
+                        message_container.append(message_inner_container)
+
+
+                        messagesDiv.append(message_container)
+
+                    });
 
 
 
-                messagesDiv.scrollTop = messagesDiv.scrollHeight + 20;
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight + 20;
 
-            })
+                })
+
+
+            }
+
 
 
         }
 
+        var app = new WEB_CHAT();
 
+        app.splash()
+
+        setTimeout(function() {
+
+            if (app.get_name() != null) {
+
+                app.chat()
+
+            } else {
+
+                app.welcome()
+            }
+
+        },
+            2000);
 
     }
-
-    var app = new WEB_CHAT();
-
-    app.splash()
-
-    setTimeout(function() {
-
-        if (app.get_name() != null) {
-
-            app.chat()
-
-        } else {
-
-            app.welcome()
-        }
-
-    },
-        2000);
-
-}
