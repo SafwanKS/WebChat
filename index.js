@@ -1,10 +1,10 @@
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function() {
-    navigator.serviceWorker
-      .register("/serviceWorker.js")
-      .then(res => console.log("service worker registered"))
-      .catch(err => console.log("service worker not registered", err))
-  })
+    window.addEventListener("load", function() {
+        navigator.serviceWorker
+        .register("/serviceWorker.js")
+        .then(res => console.log("service worker registered"))
+        .catch(err => console.log("service worker not registered", err))
+    })
 }
 
 window.onload = function() {
@@ -228,6 +228,16 @@ window.onload = function() {
 
             logo.setAttribute('id', 'logo')
 
+            var installAppBtn = document.createElement('div')
+
+            installAppBtn.setAttribute('id', 'installAppBtn')
+
+            var installTxt = document.createElement('p')
+
+            installTxt.setAttribute('id', 'installTxt')
+
+            installTxt.innerHTML = 'Install App'
+
             var modeBack = document.createElement('div')
 
             modeBack.setAttribute('class', 'modeBack')
@@ -277,8 +287,36 @@ window.onload = function() {
                 }
 
             }
+            
+            installAppBtn.style.display = 'none';
+
+            window.addEventListener('beforeinstallprompt', (event) => {
+
+                event.preventDefault();
+
+                const installPromptEvent = event;
+
+                installAppBtn.style.display = 'block';
+
+                installAppBtn.onclick = function() {
 
 
+                    installPromptEvent.prompt();
+
+                    installPromptEvent.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the install prompt');
+                        } else {
+                            console.log('User dismissed the install prompt');
+                        }
+                    });
+
+                    installAppBtn.style.display = 'none';
+
+                }
+
+
+            });
 
             var accInfo = document.createElement('div')
 
@@ -298,6 +336,8 @@ window.onload = function() {
 
             accName.style.fontWeight = '800'
 
+
+
             aboutDiv.appendChild(logo)
 
             aboutDiv.appendChild(span)
@@ -305,6 +345,10 @@ window.onload = function() {
             aboutDiv.appendChild(modeBack)
 
             modeBack.appendChild(displayMode)
+
+            installAppBtn.appendChild(installTxt)
+
+            aboutDiv.appendChild(installAppBtn)
 
             accInfo.appendChild(profile)
 
