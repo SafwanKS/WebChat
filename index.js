@@ -287,8 +287,8 @@ window.onload = function() {
                 }
 
             }
-            
-          //  installAppBtn.style.display = 'none';
+
+            installAppBtn.style.display = 'none';
 
             window.addEventListener('beforeinstallprompt', (event) => {
 
@@ -818,6 +818,23 @@ window.onload = function() {
 
 
             }
+
+            const dbRef = firebase.database().ref('chats/');
+
+            dbRef.on('child_changed', (snapshot) => {
+                // Notify the user when a child is updated
+                if (Notification.permission === 'granted') {
+                    const notification = new Notification('Firebase Update', {
+                        body: 'A child in the database has been updated!',
+                    });
+                }
+            });
+
+            // Request notification permission
+            Notification.requestPermission().then(permission => {
+                console.log('Notification permission:', permission);
+            });
+
 
 
 
