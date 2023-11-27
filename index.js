@@ -1,27 +1,5 @@
 window.onload = function() {
 
-    navigator.serviceWorker.register('/service-worker.js')
-    .then(registration => {
-        console.log('Service Worker registered with scope:', registration.scope);
-    })
-    .catch(error => {
-        console.error('Service Worker registration failed:', error);
-    });
-
-
-    async function registerServiceWorker() {
-        try {
-            const registration = await navigator.serviceWorker.register('/service-worker.js');
-            console.log('Service Worker registered with scope:', registration.scope);
-        } catch (error) {
-            console.error('Service Worker registration failed:', error);
-        }
-    }
-
-    if ('serviceWorker' in navigator) {
-        registerServiceWorker();
-    }
-
 
     var firebaseConfig = {
         apiKey: "AIzaSyDo-vaJSbBn4VBybTDtuqxdGUE_Bz5pgz4",
@@ -37,12 +15,18 @@ window.onload = function() {
     firebase.initializeApp(firebaseConfig);
 
     var db = firebase.database()
+    
+    var userTheme;
 
     class WEB_CHAT {
 
         constructor() {
 
             this.userColor = null;
+            
+            
+            
+            
         }
 
         splash() {
@@ -156,7 +140,10 @@ window.onload = function() {
                     join_btn.onclick = function() {
 
                         parent.save_name(inputName.value)
+                        
                         parent.save_color(parent.userColor);
+                        
+                        parent.save_theme('light')
 
                         console.log(parent.userColor);
 
@@ -200,6 +187,12 @@ window.onload = function() {
             this.refresh_chat()
 
         }
+        
+        profile(){
+            
+            
+            
+        }
 
         info() {
 
@@ -212,20 +205,28 @@ window.onload = function() {
             logo.setAttribute('src', 'logo.png')
 
             logo.setAttribute('id', 'logo')
+            
+            var modeBack = document.createElement('div')
+            
+            modeBack.setAttribute('class', 'modeBack')
+            
+            var displayMode = document.createElement('i')
+            
+            displayMode.setAttribute('class', 'material-symbols-outlined')
+            
+            var userTheme = this.get_theme()
+            
+            if(userTheme == 'light'){
+                
+                displayMode.innerHTML = 'dark_mode'
+                
+            }else{
+                
+                displayMode.innerHTML = 'light_mode'
+                
+            }
 
-            var installAppBtn = document.createElement('div')
-
-            installAppBtn.setAttribute('id', 'installAppBtn')
-
-            var installTxt = document.createElement('p')
-
-            installTxt.setAttribute('id', 'installTxt')
-
-            installTxt.innerHTML = 'Install App'
-
-            installAppBtn.onclick = function() {
-                app.installApp();
-            };
+            
 
             var accInfo = document.createElement('div')
 
@@ -248,10 +249,10 @@ window.onload = function() {
             aboutDiv.appendChild(logo)
 
             aboutDiv.appendChild(span)
-
-            aboutDiv.appendChild(installAppBtn)
-
-            installAppBtn.appendChild(installTxt)
+            
+            aboutDiv.appendChild(modeBack)
+            
+            modeBack.appendChild(displayMode)
 
             accInfo.appendChild(profile)
 
@@ -344,8 +345,10 @@ window.onload = function() {
                 if (clickable == true) {
 
                     sendBtn.onclick = function() {
-
-                        parent.send_message(msgInput.value)
+                        
+                        if(msgInput.value.length > 0){
+                            
+                            parent.send_message(msgInput.value)
 
                         msgInput.value = ''
 
@@ -353,6 +356,10 @@ window.onload = function() {
 
                         sendBtn.classList.add('sendBtnBack')
 
+                            
+                        }
+
+                        
                     }
 
                 }
@@ -378,6 +385,8 @@ window.onload = function() {
 
 
         }
+        
+        
 
         get_name() {
 
@@ -401,11 +410,39 @@ window.onload = function() {
         }
 
         save_color(color) {
+            
             localStorage.setItem('color', color);
+            
         }
 
         get_color() {
+            
             return localStorage.getItem('color');
+            
+        }
+        
+        save_theme(theme){
+            
+            localStorage.setItem('theme', theme)
+            
+        }
+        
+        get_theme(){
+            
+            return localStorage.getItem('theme')
+            
+        }
+        
+        set_profile(link){
+            
+            localStorage.setItem('profileLink', link)
+            
+        }
+        
+        get_profile(){
+            
+            return localStorage.getItem('profileLink')
+            
         }
 
 
@@ -446,16 +483,9 @@ window.onload = function() {
             })
 
         }
-        installApp() {
+        
+        
 
-            if (navigator && navigator.serviceWorker) {
-                navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                }).catch(function(error) {
-                    console.error('Service Worker registration failed:', error);
-                });
-            }
-        }
 
 
         refresh_chat() {
