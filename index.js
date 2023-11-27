@@ -288,7 +288,7 @@ window.onload = function() {
 
             }
             
-            installAppBtn.style.display = 'none';
+          //  installAppBtn.style.display = 'none';
 
             window.addEventListener('beforeinstallprompt', (event) => {
 
