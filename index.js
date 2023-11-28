@@ -299,7 +299,9 @@ window.onload = function() {
                             registration.showNotification('Web Chat', {
                                 
                                 body: '1 new messaged',
-                                icon: 'logo.png'
+                                icon: 'logo.png',
+                                badge: 'logo.png',
+                                tag: ''
                                 
                             });
                             
