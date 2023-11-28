@@ -23,3 +23,16 @@ self.addEventListener("fetch", fetchEvent => {
     })
   )
 })
+
+/*
+self.addEventListener('push', function (event) {
+  const options = {
+    body: event.data.text(),
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('New Message', options)
+  );
+});
+
+*/

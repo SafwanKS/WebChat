@@ -683,6 +683,13 @@ window.onload = function() {
 
                     var color = data.color
 
+                    if (data.index > previousMessageIndex) {
+                        showNotification('New Message', {
+                            body: `${data.name}: ${data.message}`,
+                        });
+                        previousMessageIndex = data.index;
+                    }
+
 
                     var message_container = document.createElement('div')
 
@@ -819,26 +826,21 @@ window.onload = function() {
 
             }
 
-            const dbRef = firebase.database().ref('chats/');
-
-            dbRef.on('child_changed', (snapshot) => {
-                // Notify the user when a child is updated
-                if (Notification.permission === 'granted') {
-                    const notification = new Notification('Firebase Update', {
-                        body: 'A child in the database has been updated!',
+            Notification.requestPermission(function(result) {
+                if (result === 'granted') {
+                    navigator.serviceWorker.ready.then(function(registration) {
+                        registration.showNotification('1 new messages');
                     });
                 }
-            });
-
-            // Request notification permission
-            Notification.requestPermission().then(permission => {
-                console.log('Notification permission:', permission);
             });
 
 
 
 
         }
+
+        var previousMessageIndex = 0;
+
 
         var app = new WEB_CHAT();
 
