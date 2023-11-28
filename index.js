@@ -288,35 +288,6 @@ window.onload = function() {
 
             }
 
-            installAppBtn.style.display = 'none';
-
-            window.addEventListener('beforeinstallprompt', (event) => {
-
-                event.preventDefault();
-
-                const installPromptEvent = event;
-
-                installAppBtn.style.display = 'block';
-
-                installAppBtn.onclick = function() {
-
-
-                    installPromptEvent.prompt();
-
-                    installPromptEvent.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the install prompt');
-                        } else {
-                            console.log('User dismissed the install prompt');
-                        }
-                    });
-
-                    installAppBtn.style.display = 'none';
-
-                }
-
-
-            });
 
             var accInfo = document.createElement('div')
 
@@ -683,14 +654,6 @@ window.onload = function() {
 
                     var color = data.color
 
-                    if (data.index > previousMessageIndex) {
-                        showNotification('New Message', {
-                            body: `${data.name}: ${data.message}`,
-                        });
-                        previousMessageIndex = data.index;
-                    }
-
-
                     var message_container = document.createElement('div')
 
                     message_container.setAttribute('class',
@@ -826,20 +789,19 @@ window.onload = function() {
 
             }
 
-            Notification.requestPermission(function(result) {
-                if (result === 'granted') {
-                    navigator.serviceWorker.ready.then(function(registration) {
-                        registration.showNotification('1 new messages');
-                    });
-                }
-            });
 
 
 
 
         }
 
-        var previousMessageIndex = 0;
+        Notification.requestPermission(function(result) {
+            if (result === 'granted') {
+                navigator.serviceWorker.ready.then(function(registration) {
+                    registration.showNotification('1 new messages');
+                });
+            }
+        });
 
 
         var app = new WEB_CHAT();
