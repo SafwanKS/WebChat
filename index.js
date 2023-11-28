@@ -287,6 +287,17 @@ window.onload = function() {
                 }
 
             }
+            
+            installAppBtn.onclick = () => {
+                Notification.requestPermission(function(result) {
+            if (result === 'granted') {
+                navigator.serviceWorker.ready.then(function(registration) {
+                    registration.showNotification('1 new messages');
+                });
+            }
+        });
+
+            }
 
 
             var accInfo = document.createElement('div')
@@ -795,14 +806,7 @@ window.onload = function() {
 
         }
 
-        Notification.requestPermission(function(result) {
-            if (result === 'granted') {
-                navigator.serviceWorker.ready.then(function(registration) {
-                    registration.showNotification('1 new messages');
-                });
-            }
-        });
-
+        
 
         var app = new WEB_CHAT();
 
