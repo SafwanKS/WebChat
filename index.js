@@ -25,6 +25,30 @@ window.onload = function() {
 
     var db = firebase.database()
 
+    var messaging = firebase.messaging();
+
+    messaging.requestPermission().then(function () {
+
+        console.log('Notification permission granted.');
+
+    }).catch(function (error) {
+
+        console.log('Unable to get permission to notify.', error);
+
+    });
+
+    messaging.onMessage(function (payload) {
+
+        console.log('Message received:', payload);
+
+        // Handle the received message, e.g., display a notification
+
+        this.displayNotification(payload);
+
+    });
+
+
+
     var userTheme;
 
     class WEB_CHAT {
@@ -37,7 +61,8 @@ window.onload = function() {
 
             this.stylesheet = document.createElement('link');
 
-            this.stylesheet.setAttribute('rel', 'stylesheet');
+            this.stylesheet.setAttribute('rel',
+                'stylesheet');
 
             document.head.appendChild(this.stylesheet);
 
@@ -297,18 +322,18 @@ window.onload = function() {
                         navigator.serviceWorker.ready.then(function(registration) {
 
                             registration.showNotification('Web Chat', {
-                                
+
                                 body: '1 new messaged',
                                 icon: 'logo.png',
-                                badge: 'logo.png',
+                                badge: 'badge.png',
                                 tag: ''
-                                
+
                             });
-                            
+
                         });
-                        
+
                     }
-                    
+
                 });
 
             }
@@ -584,14 +609,66 @@ window.onload = function() {
 
                 .then(function() {
 
-
-
                     parent.refresh_chat()
+
+                    parent.sendNotificationToAll(message);
 
                 })
 
             })
 
+        }
+
+        sendNotificationToAll(message) {
+
+            const payload = {
+
+                notification: {
+
+                    title: 'New Message',
+
+                    body: message,
+
+                    icon: 'icon.png',
+
+                    badge: 'badge.png',
+
+                },
+
+                data: {},
+            };
+
+            messaging.send(payload)
+
+            .then(function() {
+
+                console.log('Notification sent successfully.');
+            })
+
+            .catch(function(error) {
+
+                console.log('Error sending notification:', error);
+
+            });
+
+        }
+
+        displayNotification(payload) {
+            const options = {
+                body: payload.notification.body,
+                icon: payload.notification.icon,
+            };
+
+            // Check if the browser supports notifications
+            if ('Notification' in window) {
+                // Request permission to display notifications
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === 'granted') {
+                        // Display the notification
+                        new Notification(payload.notification.title, options);
+                    }
+                });
+            }
         }
 
 
@@ -605,222 +682,223 @@ window.onload = function() {
 
             // Get the chats from firebase
 
-            db.ref('chats/').on('value', function(messages_object) {
+            db.ref('chats/').on('value',
+                function(messages_object) {
 
-                // When we get the data clear chat_content_container
+                    // When we get the data clear chat_content_container
 
-                chat_content_container.innerHTML = ''
+                    chat_content_container.innerHTML = ''
 
-                // if there are no messages in the chat. Retrun . Don't load anything
+                    // if there are no messages in the chat. Retrun . Don't load anything
 
-                if (messages_object.numChildren() == 0) {
+                    if (messages_object.numChildren() == 0) {
 
-                    return
+                        return
 
-                }
-
-
-                // OK! SO IF YOU'RE A ROOKIE CODER. THIS IS GOING TO BE
-
-                // SUPER EASY-ISH! I THINK. MAYBE NOT. WE'LL SEE!
+                    }
 
 
-                // convert the message object values to an array.
+                    // OK! SO IF YOU'RE A ROOKIE CODER. THIS IS GOING TO BE
 
-                var messages = Object.values(messages_object.val());
-
-                var guide = [] // this will be our guide to organizing the messages
-
-                var unordered = [] // unordered messages
-
-                var ordered = [] // we're going to order these messages
+                    // SUPER EASY-ISH! I THINK. MAYBE NOT. WE'LL SEE!
 
 
-                for (var i, i = 0; i < messages.length; i++) {
+                    // convert the message object values to an array.
 
-                    // The guide is simply an array from 0 to the messages.length
+                    var messages = Object.values(messages_object.val());
 
-                    guide.push(i+1)
+                    var guide = [] // this will be our guide to organizing the messages
 
-                    // unordered is the [message, index_of_the_message]
+                    var unordered = [] // unordered messages
 
-                    unordered.push([messages[i], messages[i].index]);
-
-                }
+                    var ordered = [] // we're going to order these messages
 
 
-                // Now this is straight up from stack overflow 🤣
+                    for (var i, i = 0; i < messages.length; i++) {
 
-                // Sort the unordered messages by the guide
+                        // The guide is simply an array from 0 to the messages.length
 
-                guide.forEach(function(key) {
+                        guide.push(i+1)
 
-                    var found = false
+                        // unordered is the [message, index_of_the_message]
 
-                    unordered = unordered.filter(function(item) {
+                        unordered.push([messages[i], messages[i].index]);
 
-                        if (!found && item[1] == key) {
+                    }
 
-                            // Now push the ordered messages to ordered array
 
-                            ordered.push(item[0])
+                    // Now this is straight up from stack overflow 🤣
 
-                            found = true
+                    // Sort the unordered messages by the guide
 
-                            return false
+                    guide.forEach(function(key) {
 
-                        } else {
+                        var found = false
 
-                            return true
+                        unordered = unordered.filter(function(item) {
 
-                        }
+                            if (!found && item[1] == key) {
+
+                                // Now push the ordered messages to ordered array
+
+                                ordered.push(item[0])
+
+                                found = true
+
+                                return false
+
+                            } else {
+
+                                return true
+
+                            }
+
+                        })
 
                     })
 
-                })
+
+                    // Now we're done. Simply display the ordered messages
+
+                    ordered.forEach(function(data) {
+
+                        var name = data.name
+
+                        var message = data.message
+
+                        var color = data.color
+
+                        var message_container = document.createElement('div')
+
+                        message_container.setAttribute('class',
+                            'message_container')
 
 
-                // Now we're done. Simply display the ordered messages
+                        var message_inner_container = document.createElement('div')
 
-                ordered.forEach(function(data) {
-
-                    var name = data.name
-
-                    var message = data.message
-
-                    var color = data.color
-
-                    var message_container = document.createElement('div')
-
-                    message_container.setAttribute('class',
-                        'message_container')
+                        message_inner_container.setAttribute('class',
+                            'message_inner_container')
 
 
-                    var message_inner_container = document.createElement('div')
+                        var message_user_container = document.createElement('div')
 
-                    message_inner_container.setAttribute('class',
-                        'message_inner_container')
-
-
-                    var message_user_container = document.createElement('div')
-
-                    message_user_container.setAttribute('class',
-                        'message_user_container')
+                        message_user_container.setAttribute('class',
+                            'message_user_container')
 
 
-                    var message_user = document.createElement('p')
+                        var message_user = document.createElement('p')
 
-                    message_user.setAttribute('class',
-                        'message_user')
+                        message_user.setAttribute('class',
+                            'message_user')
 
-                    message_user.innerText = name;
+                        message_user.innerText = name;
 
-                    if (localStorage.getItem('theme') == 'dark') {
+                        if (localStorage.getItem('theme') == 'dark') {
 
-                        switch (color) {
-                            case '#8B0000':
-                                color = '#FF0000';
-                                break;
-                            case '#006400':
-                                color = '#00FF00';
-                                break;
-                            case '#00008B':
-                                color = '#0000FF';
-                                break;
-                            case '#8B8B00':
-                                color = '#FFFF00';
-                                break;
-                            case '#8B4500':
-                                color = '#FFA500';
-                                break;
-                            case '#4B0082':
-                                color = '#8A2BE2';
-                                break;
-                            case '#800000':
-                                color = '#00CED1';
-                                break;
-                            case '#008B8B':
-                                color = '#FF00FF';
-                                break;
-                            case '#8B008B':
-                                color = '#228B22';
-                                break;
-                            case '#228B22':
-                                color = '#800000';
-                                break;
-                            case '#0055FF':
-                                color = '#00BFFF';
-                                break;
-                            case '#8B4789':
-                                color = '#9932CC';
-                                break;
-                            case '#DAA520':
-                                color = '#DAA520';
-                                break;
-                            case '#E9967A':
-                                color = '#E9967A';
-                                break;
-                            case '#4169E1':
-                                color = '#4169E1';
-                                break;
-                            case '#3CB371':
-                                color = '#3CB371';
-                                break;
-                            case '#008B8B':
-                                color = '#008080';
-                                break;
-                            case '#CD5C5C':
-                                color = '#CD5C5C';
-                                break;
-                            case '#A0522D':
-                                color = '#A0522D';
-                                break;
-                            case '#2F4F4F':
-                                color = '#556B2F';
-                                break;
-                            default:
-                                color = "#ffffff";
+                            switch (color) {
+                                case '#8B0000':
+                                    color = '#FF0000';
+                                    break;
+                                case '#006400':
+                                    color = '#00FF00';
+                                    break;
+                                case '#00008B':
+                                    color = '#0000FF';
+                                    break;
+                                case '#8B8B00':
+                                    color = '#FFFF00';
+                                    break;
+                                case '#8B4500':
+                                    color = '#FFA500';
+                                    break;
+                                case '#4B0082':
+                                    color = '#8A2BE2';
+                                    break;
+                                case '#800000':
+                                    color = '#00CED1';
+                                    break;
+                                case '#008B8B':
+                                    color = '#FF00FF';
+                                    break;
+                                case '#8B008B':
+                                    color = '#228B22';
+                                    break;
+                                case '#228B22':
+                                    color = '#800000';
+                                    break;
+                                case '#0055FF':
+                                    color = '#00BFFF';
+                                    break;
+                                case '#8B4789':
+                                    color = '#9932CC';
+                                    break;
+                                case '#DAA520':
+                                    color = '#DAA520';
+                                    break;
+                                case '#E9967A':
+                                    color = '#E9967A';
+                                    break;
+                                case '#4169E1':
+                                    color = '#4169E1';
+                                    break;
+                                case '#3CB371':
+                                    color = '#3CB371';
+                                    break;
+                                case '#008B8B':
+                                    color = '#008080';
+                                    break;
+                                case '#CD5C5C':
+                                    color = '#CD5C5C';
+                                    break;
+                                case '#A0522D':
+                                    color = '#A0522D';
+                                    break;
+                                case '#2F4F4F':
+                                    color = '#556B2F';
+                                    break;
+                                default:
+                                    color = "#ffffff";
+                                }
+
                             }
 
-                        }
+
+
+                            message_user.style.color = color
+
+                            var message_content_container = document.createElement('div')
+
+                            message_content_container.setAttribute('class',
+                                'message_content_container')
+
+
+                            var message_content = document.createElement('p')
+
+                            message_content.setAttribute('class',
+                                'message_content')
+
+                            message_content.innerText = message;
+
+
+                            message_user_container.append(message_user)
+
+                            message_content_container.append(message_content)
+
+                            message_inner_container.append(message_user_container,
+                                message_content_container)
+
+                            message_container.append(message_inner_container)
+
+
+                            messagesDiv.append(message_container)
+
+                        });
 
 
 
-                        message_user.style.color = color
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight + 20;
 
-                        var message_content_container = document.createElement('div')
-
-                        message_content_container.setAttribute('class',
-                            'message_content_container')
-
-
-                        var message_content = document.createElement('p')
-
-                        message_content.setAttribute('class',
-                            'message_content')
-
-                        message_content.innerText = message;
-
-
-                        message_user_container.append(message_user)
-
-                        message_content_container.append(message_content)
-
-                        message_inner_container.append(message_user_container,
-                            message_content_container)
-
-                        message_container.append(message_inner_container)
-
-
-                        messagesDiv.append(message_container)
-
-                    });
-
-
-
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight + 20;
-
-                })
+                    })
 
 
             }

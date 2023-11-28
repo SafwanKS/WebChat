@@ -24,15 +24,12 @@ self.addEventListener("fetch", fetchEvent => {
   )
 })
 
-/*
-self.addEventListener('push', function (event) {
+self.addEventListener('push', event => {
   const options = {
     body: event.data.text(),
   };
 
   event.waitUntil(
-    self.registration.showNotification('New Message', options)
+    self.registration.showNotification('Web Chat', options)
   );
 });
-
-*/
