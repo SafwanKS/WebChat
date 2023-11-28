@@ -24,7 +24,7 @@ window.onload = function() {
     firebase.initializeApp(firebaseConfig);
 
     var db = firebase.database()
-
+/*
     var messaging = firebase.messaging();
 
     messaging.requestPermission().then(function () {
@@ -46,6 +46,7 @@ window.onload = function() {
         this.displayNotification(payload);
 
     });
+    */
 
 
 
@@ -313,7 +314,7 @@ window.onload = function() {
 
             }
 
-            installAppBtn.onclick = () => {
+          /* installAppBtn.onclick = () => {
 
                 Notification.requestPermission(function(result) {
 
@@ -336,7 +337,7 @@ window.onload = function() {
 
                 });
 
-            }
+            }*/
 
 
             var accInfo = document.createElement('div')
@@ -368,9 +369,9 @@ window.onload = function() {
 
             modeBack.appendChild(displayMode)
 
-            installAppBtn.appendChild(installTxt)
+           // installAppBtn.appendChild(installTxt)
 
-            aboutDiv.appendChild(installAppBtn)
+          //  aboutDiv.appendChild(installAppBtn)
 
             accInfo.appendChild(profile)
 
@@ -611,7 +612,7 @@ window.onload = function() {
 
                     parent.refresh_chat()
 
-                    parent.sendNotificationToAll(message);
+                   // parent.sendNotificationToAll(message);
 
                 })
 
@@ -619,7 +620,7 @@ window.onload = function() {
 
         }
 
-        sendNotificationToAll(message) {
+      /*  sendNotificationToAll(message) {
 
             const payload = {
 
@@ -670,7 +671,7 @@ window.onload = function() {
                 });
             }
         }
-
+*/
 
 
 
