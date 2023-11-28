@@ -287,22 +287,35 @@ window.onload = function() {
                 }
 
             }
-            
+
             installAppBtn.onclick = () => {
+
                 Notification.requestPermission(function(result) {
-            if (result === 'granted') {
-                navigator.serviceWorker.ready.then(function(registration) {
-                    registration.showNotification('1 new messages');
+
+                    if (result === 'granted') {
+
+                        navigator.serviceWorker.ready.then(function(registration) {
+
+                            registration.showNotification('Web Chat', {
+                                
+                                body: '1 new messaged',
+                                icon: 'logo.png'
+                                
+                            });
+                            
+                        });
+                        
+                    }
+                    
                 });
-            }
-        });
 
             }
 
 
             var accInfo = document.createElement('div')
 
-            accInfo.setAttribute('id', 'accInfo')
+            accInfo.setAttribute('id',
+                'accInfo')
 
             var span = document.createElement('span')
 
@@ -346,7 +359,8 @@ window.onload = function() {
 
             var messagesDiv = document.createElement('div')
 
-            messagesDiv.setAttribute('id', 'messagesDiv')
+            messagesDiv.setAttribute('id',
+                'messagesDiv')
 
             document.body.appendChild(messagesDiv)
 
@@ -359,42 +373,51 @@ window.onload = function() {
 
             var inputDiv = document.createElement('div')
 
-            inputDiv.setAttribute('id', 'inputDiv')
+            inputDiv.setAttribute('id',
+                'inputDiv')
 
             var inputTextBack = document.createElement('div')
 
-            inputTextBack.setAttribute('id', 'inputTextBack')
+            inputTextBack.setAttribute('id',
+                'inputTextBack')
 
             var msgInput = document.createElement('input')
 
-            msgInput.setAttribute('id', 'msgInput')
+            msgInput.setAttribute('id',
+                'msgInput')
 
-            msgInput.setAttribute('placeholder', 'Enter message')
+            msgInput.setAttribute('placeholder',
+                'Enter message')
 
 
             var iconsDivBack = document.createElement('div')
 
-            iconsDivBack.setAttribute('id', 'iconsDivBack')
+            iconsDivBack.setAttribute('id',
+                'iconsDivBack')
 
             var uploadBtn = document.createElement('div')
 
-            uploadBtn.setAttribute('id', 'uploadBtn')
+            uploadBtn.setAttribute('id',
+                'uploadBtn')
 
             var sendBtn = document.createElement('div')
 
-            sendBtn.setAttribute('id', 'sendBtn')
+            sendBtn.setAttribute('id',
+                'sendBtn')
 
             sendBtn.classList.add('sendBtnBack')
 
             var uploadIcon = document.createElement('i')
 
-            uploadIcon.setAttribute('id', 'uploadIcon')
+            uploadIcon.setAttribute('id',
+                'uploadIcon')
 
             uploadIcon.classList.add('gg-add')
 
             var sendIcon = document.createElement('i')
 
-            sendIcon.setAttribute('id', 'sendIcon')
+            sendIcon.setAttribute('id',
+                'sendIcon')
 
             sendIcon.classList.add('material-icons')
 
@@ -806,7 +829,7 @@ window.onload = function() {
 
         }
 
-        
+
 
         var app = new WEB_CHAT();
 
