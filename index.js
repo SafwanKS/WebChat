@@ -224,8 +224,9 @@ window.onload = function() {
                                 parent.save_theme('light');
                                 db.ref('users/' + enteredUsername).set({
                                     color: parent.userColor,
-                                    theme: 'light'
-                                    blocked: 'false'
+                                    theme: 'light',
+                                    blocked: false,
+                                    verified: false
                                 });
                                 location.reload();
                             }
