@@ -308,7 +308,32 @@ window.onload = function() {
 
             logo.setAttribute('id',
                 'logo')
-
+                
+            var activeUsersDiv = document.createElement('div')
+            
+            activeUsersDiv.setAttribute('id', 'activeUsers')
+            
+            var circle = document.createElement('div')
+            
+            circle.setAttribute('id', 'greenCircle')
+            
+             var activeUsersCount = document.createElement('p')
+            
+            activeUsersCount.setAttribute('id', 'activeUsersCount')
+            
+            var activeUsersRef = db.ref('activeUsers')
+            
+            activeUsersRef.once('value')
+            .then(function(snapshot){
+                activeUsersCount.innerHTML = snapshot.numChildren() + ' online'
+                activeUsersDiv.style.display = 'flex'
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+            
+            
+            
             var installAppBtn = document.createElement('div')
 
             installAppBtn.setAttribute('id',
@@ -427,6 +452,12 @@ window.onload = function() {
             aboutDiv.appendChild(modeBack)
 
             modeBack.appendChild(displayMode)
+            
+            activeUsersDiv.appendChild(circle)
+            
+            activeUsersDiv.appendChild(activeUsersCount)
+            
+            aboutDiv.appendChild(activeUsersDiv)
 
             // installAppBtn.appendChild(installTxt)
 
