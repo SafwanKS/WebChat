@@ -1,3 +1,8 @@
+if (window.innerWidth >= 768) {
+    // Code for larger screens (laptops and above)
+} else {
+    // Code for smaller screens
+}
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
         navigator.serviceWorker
@@ -24,30 +29,6 @@ window.onload = function() {
     firebase.initializeApp(firebaseConfig);
 
     var db = firebase.database()
-    /*
-    var messaging = firebase.messaging();
-
-    messaging.requestPermission().then(function () {
-
-        console.log('Notification permission granted.');
-
-    }).catch(function (error) {
-
-        console.log('Unable to get permission to notify.', error);
-
-    });
-
-    messaging.onMessage(function (payload) {
-
-        console.log('Message received:', payload);
-
-        // Handle the received message, e.g., display a notification
-
-        this.displayNotification(payload);
-
-    });
-    */
-
 
 
     var userTheme;
@@ -83,9 +64,13 @@ window.onload = function() {
 
         splash() {
 
+            var parent = this;
+
+            var userName = parent.get_name()
+
             if (localStorage.getItem('name') != null) {
 
-                db.ref('users/' + this.get_name()).once('value', function(snapshot) {
+                db.ref('users/' + userName).once('value', function(snapshot) {
                     if (snapshot.exists()) {} else {
                         localStorage.removeItem('name')
                         alert('Sorry. You are logged out because some technical issues.')
@@ -206,38 +191,59 @@ window.onload = function() {
 
             inputName.onkeyup = function() {
 
-                if (inputName.value.length > 0) {
+                var username = inputName.value.trim();
 
-                    join_btn.classList.add('active')
+                var isClickable = false
 
-                
+                var validUsername = /^[a-zA-Z0-9]+$/.test(username);
+
+                if (username.length > 0 && validUsername) {
+
+                    join_btn.style.display = 'block'
+
+                    isClickable = true
+
+
                     join_btn.onclick = function() {
-                        var enteredUsername = inputName.value;
 
-                        db.ref('users/' + enteredUsername).once('value', function(snapshot) {
-                            if (snapshot.exists()) {
-                                alert('Username already exists. Choose another.');
-                            } else {
+                        if (isClickable == true) {
 
-                                parent.save_name(enteredUsername);
-                                parent.save_color(parent.userColor);
-                                parent.save_theme('light');
-                                db.ref('users/' + enteredUsername).set({
-                                    color: parent.userColor,
-                                    theme: 'light',
-                                    blocked: false,
-                                    verified: false
-                                });
-                                location.reload();
-                            }
-                        });
+                            var enteredUsername = inputName.value;
+
+                            db.ref('users/' + enteredUsername).once('value', function(snapshot) {
+                                if (snapshot.exists()) {
+                                    alert('Username already exists. Choose another.');
+                                } else {
+
+                                    parent.save_name(enteredUsername);
+                                    parent.save_color(parent.userColor);
+                                    parent.save_theme('light');
+                                    db.ref('users/' + enteredUsername).set({
+                                        color: parent.userColor,
+                                        theme: 'light',
+                                        blocked: false,
+                                        verified: false
+                                    });
+                                    location.reload();
+                                }
+
+                            });
+
+                        } else {
+
+                            alert('Invalid username. ')
+
+                        }
+
                     };
 
 
 
                 } else {
 
-                    join_btn.classList.remove('active')
+                    join_btn.style.display = 'none'
+
+                    isClickable = false
 
                 }
 
@@ -269,6 +275,21 @@ window.onload = function() {
 
             this.refresh_chat()
 
+            var userName = this.get_name()
+
+            var activeUsers = db.ref('activeUsers/' + userName)
+
+            activeUsers.child(userName).set(true, function(error) {
+                if (error) {
+                    console.log(error)
+
+                } else {
+                    console.log('success')
+                }
+            })
+
+
+
         }
 
         profile() {}
@@ -277,31 +298,38 @@ window.onload = function() {
 
             var aboutDiv = document.createElement('div')
 
-            aboutDiv.setAttribute('id', 'aboutDiv')
+            aboutDiv.setAttribute('id',
+                'aboutDiv')
 
             var logo = document.createElement('img')
 
-            logo.setAttribute('src', 'logo.png')
+            logo.setAttribute('src',
+                'logo.png')
 
-            logo.setAttribute('id', 'logo')
+            logo.setAttribute('id',
+                'logo')
 
             var installAppBtn = document.createElement('div')
 
-            installAppBtn.setAttribute('id', 'installAppBtn')
+            installAppBtn.setAttribute('id',
+                'installAppBtn')
 
             var installTxt = document.createElement('p')
 
-            installTxt.setAttribute('id', 'installTxt')
+            installTxt.setAttribute('id',
+                'installTxt')
 
             installTxt.innerHTML = 'Install App'
 
             var modeBack = document.createElement('div')
 
-            modeBack.setAttribute('class', 'modeBack')
+            modeBack.setAttribute('class',
+                'modeBack')
 
             var displayMode = document.createElement('i')
 
-            displayMode.setAttribute('class', 'material-symbols-outlined')
+            displayMode.setAttribute('class',
+                'material-symbols-outlined')
 
             var userTheme = this.get_theme()
 
@@ -583,7 +611,18 @@ window.onload = function() {
 
         save_theme(theme) {
 
+            var parent = this
+
             localStorage.setItem('theme', theme)
+
+            var userName = this.get_name()
+
+            db.ref('users/' + userName).set({
+                color: parent.userColor,
+                theme: theme,
+                blocked: false,
+                verified: false
+            });
 
         }
 
@@ -703,6 +742,18 @@ window.onload = function() {
             }
         }
 */
+
+        remove_child() {
+            var parent = this
+
+            var userName = localStorage.getItem('name')
+
+            var childRef = db.ref('activeUsers/'+ userName);
+
+            childRef.remove();
+
+        }
+
 
 
 
@@ -937,9 +988,13 @@ window.onload = function() {
 
 
 
-
-
         }
+
+        window.addEventListener('unload', function() {
+            
+            app.remove_child()
+            
+        })
 
 
 
