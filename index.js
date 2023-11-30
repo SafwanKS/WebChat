@@ -277,17 +277,25 @@ window.onload = function() {
 
             var userName = this.get_name()
 
-            var activeUsers = db.ref('activeUsers/' + userName)
+            var activeUsers = db.ref('activeUsers/')
 
-            activeUsers.child(userName).set(true, function(error) {
-                if (error) {
-                    console.log(error)
+            activeUsers.once('value').then(function(snapshot) {
+
+                if (!snapshot.hasChild(userName)) {
+
+                    activeUsers.child(userName).set(true);
+
+                    console.log('Username uploaded successfully');
 
                 } else {
-                    console.log('success')
-                }
-            })
 
+                    console.log('Username already exists in activeUsers');
+                }
+            }).catch(function(error) {
+
+                console.error('Error checking/updating username:', error);
+
+            });
 
 
         }
@@ -330,14 +338,19 @@ window.onload = function() {
 
             var activeUsersRef = db.ref('activeUsers')
 
-            activeUsersRef.once('value')
-            .then(function(snapshot) {
-                activeUsersCount.innerHTML = snapshot.numChildren() + ' online'
-                activeUsersDiv.style.display = 'flex'
-            })
-            .catch(function(error) {
-                console.log(error)
-            })
+            activeUsersRef.on('value',
+                function(snapshot) {
+                    
+                    activeUsersCount.innerHTML = snapshot.numChildren() + ' online';
+                    
+                    activeUsersDiv.style.display = 'flex';
+                    
+                },
+                function(error) {
+                    
+                    console.log(error);
+                    
+                });
 
 
 
@@ -831,7 +844,7 @@ window.onload = function() {
             const activeUsersRef = db.ref('activeUsers');
 
             activeUsersRef.on('value', function(snapshot) {
-                
+
                 activeUsersList.innerHTML = '';
 
                 snapshot.forEach(function(childSnapshot) {
@@ -839,7 +852,7 @@ window.onload = function() {
                     var userName = childSnapshot.key;
 
                     var listItem = document.createElement('li');
-                    
+
                     listItem.textContent = userName;
 
                     activeUsersList.appendChild(listItem);
@@ -1118,6 +1131,6 @@ window.onload = function() {
             }
 
         },
-            2000);
+            4000);
 
     }
