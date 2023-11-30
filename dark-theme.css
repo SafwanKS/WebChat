@@ -152,6 +152,7 @@ button:hover {
     cursor: pointer;
     width: 40px;
     height: 40px;
+    margin-right: 5px;
     background: #333;
     border: none;
     border-radius: 30px;
@@ -252,6 +253,7 @@ button:hover {
     width: 45px;
     height: 45px;
     border: none;
+    
     border-radius: 30px;
     background: #2096F3;
     outline: none;
@@ -319,6 +321,124 @@ button:hover {
     color: white;
     margin-left: 7px;
 }
+
+#bottomSheetContainer {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    background: #000;
+    opacity: 0.4;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+#bottom-sheet {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    transition: 0.1s linear;
+}
+
+#bottom-sheet.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#bottom-sheet #sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    background: #000;
+}
+
+#bottom-sheet #content {
+    box-sizing: border-box;
+    background: #333;
+    height: 60vh;
+    max-height: 100vh;
+    padding: 25px 10px;
+    width: 100%;
+    max-width: 1100px;
+    border-radius: 12px 12px 0 0;
+    position: relative;
+    transform: translateY(100%);
+    transition: 0.3s ease;
+}
+
+#bottom-sheet.show #content {
+    transform: translateY(0%);
+}
+
+#bottom-sheet #header {
+    display: flex;
+    justify-content: center;
+}
+
+#bottom-sheet #drag-icon {
+    cursor: grab;
+    user-select: none;
+    padding: 15px;
+    margin-top: -15px;
+}
+
+#bottom-sheet #drag-icon span {
+    height: 4px;
+    width: 40px;
+    display: block;
+    background: #C7D0E1;
+    border-radius: 50px;
+}
+
+#bottom-sheet #body {
+    overflow-y: auto;
+    height: 100%;
+    color: white;
+    width: 100%;
+    padding: 0 0 40px;
+    scrollbar-width: none;
+}
+
+#bottom-sheet #body::-webkit-scrollbar {
+    width: 0;
+}
+
+#bottom-sheet #body h2 {
+    font-size: 1.8rem;
+}
+
+#bottom-sheet #body p {
+    font-size: 1.05rem;
+    margin-top: 10px;
+}
+
+#bottom-sheet #body li {
+    background: #2c2c2c;
+    width: 90%;
+    color: white;
+    margin: 0 auto 0;
+    height: 40px;
+    padding: 0 10px 0;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+}
+
 #greenCircle{
     width: 7px;
     height: 7px;

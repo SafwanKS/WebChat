@@ -308,32 +308,39 @@ window.onload = function() {
 
             logo.setAttribute('id',
                 'logo')
-                
+
             var activeUsersDiv = document.createElement('div')
-            
-            activeUsersDiv.setAttribute('id', 'activeUsers')
-            
+
+            activeUsersDiv.setAttribute('id',
+                'activeUsers')
+
+            activeUsersDiv.onclick = () => {
+                this.showBottomSheetView()
+            }
+
             var circle = document.createElement('div')
-            
-            circle.setAttribute('id', 'greenCircle')
-            
-             var activeUsersCount = document.createElement('p')
-            
-            activeUsersCount.setAttribute('id', 'activeUsersCount')
-            
+
+            circle.setAttribute('id',
+                'greenCircle')
+
+            var activeUsersCount = document.createElement('p')
+
+            activeUsersCount.setAttribute('id',
+                'activeUsersCount')
+
             var activeUsersRef = db.ref('activeUsers')
-            
+
             activeUsersRef.once('value')
-            .then(function(snapshot){
+            .then(function(snapshot) {
                 activeUsersCount.innerHTML = snapshot.numChildren() + ' online'
                 activeUsersDiv.style.display = 'flex'
             })
-            .catch(function(error){
+            .catch(function(error) {
                 console.log(error)
             })
-            
-            
-            
+
+
+
             var installAppBtn = document.createElement('div')
 
             installAppBtn.setAttribute('id',
@@ -452,11 +459,11 @@ window.onload = function() {
             aboutDiv.appendChild(modeBack)
 
             modeBack.appendChild(displayMode)
-            
+
             activeUsersDiv.appendChild(circle)
-            
+
             activeUsersDiv.appendChild(activeUsersCount)
-            
+
             aboutDiv.appendChild(activeUsersDiv)
 
             // installAppBtn.appendChild(installTxt)
@@ -705,6 +712,8 @@ window.onload = function() {
 
                     color: parent.get_color(),
 
+                    deleted: false,
+
                     index: index
 
                 })
@@ -783,6 +792,68 @@ window.onload = function() {
 
             childRef.remove();
 
+        }
+
+        showBottomSheetView() {
+            const bottomSheet = document.createElement('div');
+            bottomSheet.id = 'bottom-sheet';
+            bottomSheet.classList.add('show')
+
+            const sheetOverlay = document.createElement('div');
+            sheetOverlay.id = 'sheet-overlay';
+            sheetOverlay.onclick = function() {
+                bottomSheet.classList.remove('show')
+            }
+            const content = document.createElement('div');
+            content.id = 'content';
+
+            const header = document.createElement('div');
+            header.id = 'header';
+
+            const dragIcon = document.createElement('div');
+            dragIcon.id = 'drag-icon';
+
+            const spanElement = document.createElement('span');
+            dragIcon.appendChild(spanElement);
+
+            header.appendChild(dragIcon);
+            content.appendChild(header);
+
+            const body = document.createElement('div');
+            body.id = 'body';
+
+            const h4Element = document.createElement('h4');
+            h4Element.style.textAlign = 'center';
+            h4Element.textContent = 'Active users';
+
+            const activeUsersList = document.createElement('div');
+
+            const activeUsersRef = db.ref('activeUsers');
+
+            activeUsersRef.on('value', function(snapshot) {
+                
+                activeUsersList.innerHTML = '';
+
+                snapshot.forEach(function(childSnapshot) {
+
+                    var userName = childSnapshot.key;
+
+                    var listItem = document.createElement('li');
+                    
+                    listItem.textContent = userName;
+
+                    activeUsersList.appendChild(listItem);
+                });
+            });
+
+
+            body.appendChild(h4Element);
+            body.appendChild(activeUsersList)
+            content.appendChild(body);
+
+            bottomSheet.appendChild(sheetOverlay);
+            bottomSheet.appendChild(content);
+            document.body.appendChild(bottomSheet)
         }
 
 
@@ -1019,12 +1090,14 @@ window.onload = function() {
 
 
 
+
+
         }
 
         window.addEventListener('unload', function() {
-            
+
             app.remove_child()
-            
+
         })
 
 
