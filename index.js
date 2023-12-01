@@ -30,7 +30,6 @@ window.onload = function() {
 
     var db = firebase.database()
 
-    var bottomSheetOpen = false;
 
     var userTheme;
 
@@ -797,25 +796,10 @@ window.onload = function() {
         }
 */
 
-        remove_child() {
-            var parent = this
 
-            var userName = localStorage.getItem('name')
-
-            var childRef = db.ref('activeUsers/'+ userName);
-
-            childRef.remove();
-
-        }
-
-        showBottomSheetView() {
-            this.bottomSheetOpen = true;
-            window.history.pushState({
-                sheetVisible: true
-            }, "Sheet Visible", "?q=bottomSheet");
+        bottomSheet() {
             const bottomSheet = document.createElement('div');
             bottomSheet.id = 'bottom-sheet';
-            bottomSheet.classList.add('show')
 
             const sheetOverlay = document.createElement('div');
             sheetOverlay.id = 'sheet-overlay';
@@ -872,6 +856,34 @@ window.onload = function() {
             bottomSheet.appendChild(sheetOverlay);
             bottomSheet.appendChild(content);
             document.body.appendChild(bottomSheet)
+        }
+
+        showBottomSheetView() {
+
+            localStorage.setItem('screen', 'btsheet')
+
+            localStorage.setItem('showBottomSheet', 'true')
+
+            var bottomSheetView = document.getElementById('bottom-sheet');
+
+            bottomSheetView.classList.add('show');
+
+            window.history.pushState({
+                id: 2
+            }, null, '?q=bottomSheet')
+
+        }
+
+        hideBottomSheet() {
+
+            localStorage.setItem('screen', 'chat')
+
+            localStorage.removeItem('showBottomSheet')
+
+            var bottomSheetView = document.getElementById('bottom-sheet');
+
+            bottomSheetView.classList.remove('show');
+
         }
 
 
@@ -1128,7 +1140,12 @@ window.onload = function() {
 
             if (app.get_name() != null) {
 
+                window.history.pushState({
+                    id: 1
+                }, null, '?q=Global_Chat')
+                localStorage.setItem('screen', 'chat')
                 app.chat()
+                app.bottomSheet()
 
             } else {
 
@@ -1139,25 +1156,37 @@ window.onload = function() {
             4000);
 
 
+        window.addEventListener("popstate",
+            handleEvent)
 
-        if (window.history.state && window.history.state.sheetVisible) {
-            const bottomSheetView = document.getElementById('bottom-sheet');
-            bottomSheetView.classList.add('show');
-            console.log('bt show')
-        } else {
-            console.log('bt hide')
+        function handleEvent() {
+
+            var bottomSheetOpen = localStorage.getItem('showBottomSheet')
+
+            var screen = localStorage.getItem('screen')
+
+            if (!(bottomSheetOpen == null)) {
+
+                app.hideBottomSheet()
+
+            }
+
+            if (screen == 'chat') {
+
+                console.log('yes')
+
+                var userName = localStorage.getItem('name')
+
+                var childRef = db.ref('activeUsers/'+ userName);
+
+                childRef.remove();
+
+                window.close()
+                window.close()
+
+            }
+
         }
 
-        window.addEventListener("popstate",() => {
-                window.history.replaceState({
-                    sheetVisible: false
-                }, "Sheet Hidden", "");
-                    console.log("popstate event triggered", event.state);
-                    const bottomSheet = document.getElementById('bottom-sheet');
-                    bottomSheet.classList.remove('show');
-
-                    app.bottomSheetOpen = false;
-                
-            })
 
     }
