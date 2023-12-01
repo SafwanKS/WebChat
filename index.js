@@ -30,6 +30,7 @@ window.onload = function() {
 
     var db = firebase.database()
 
+    var bottomSheetOpen = false;
 
     var userTheme;
 
@@ -340,16 +341,16 @@ window.onload = function() {
 
             activeUsersRef.on('value',
                 function(snapshot) {
-                    
+
                     activeUsersCount.innerHTML = snapshot.numChildren() + ' online';
-                    
+
                     activeUsersDiv.style.display = 'flex';
-                    
+
                 },
                 function(error) {
-                    
+
                     console.log(error);
-                    
+
                 });
 
 
@@ -808,6 +809,10 @@ window.onload = function() {
         }
 
         showBottomSheetView() {
+            this.bottomSheetOpen = true;
+            window.history.pushState({
+                sheetVisible: true
+            }, "Sheet Visible", "?q=bottomSheet");
             const bottomSheet = document.createElement('div');
             bottomSheet.id = 'bottom-sheet';
             bottomSheet.classList.add('show')
@@ -1132,5 +1137,27 @@ window.onload = function() {
 
         },
             4000);
+
+
+
+        if (window.history.state && window.history.state.sheetVisible) {
+            const bottomSheetView = document.getElementById('bottom-sheet');
+            bottomSheetView.classList.add('show');
+            console.log('bt show')
+        } else {
+            console.log('bt hide')
+        }
+
+        window.addEventListener("popstate",() => {
+                window.history.replaceState({
+                    sheetVisible: false
+                }, "Sheet Hidden", "");
+                    console.log("popstate event triggered", event.state);
+                    const bottomSheet = document.getElementById('bottom-sheet');
+                    bottomSheet.classList.remove('show');
+
+                    app.bottomSheetOpen = false;
+                
+            })
 
     }
