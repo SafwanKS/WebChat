@@ -1121,21 +1121,15 @@ window.onload = function() {
 
 
 
-
         }
-
-        window.addEventListener('unload', function() {
-
-            app.remove_child()
-
-        })
 
 
 
         var app = new WEB_CHAT();
 
         app.splash()
-
+    //    app.toast()
+        
         setTimeout(function() {
 
             if (app.get_name() != null) {
@@ -1146,6 +1140,7 @@ window.onload = function() {
                 localStorage.setItem('screen', 'chat')
                 app.chat()
                 app.bottomSheet()
+                
 
             } else {
 
@@ -1160,6 +1155,7 @@ window.onload = function() {
             handleEvent)
 
         function handleEvent() {
+
 
             var bottomSheetOpen = localStorage.getItem('showBottomSheet')
 
@@ -1182,7 +1178,23 @@ window.onload = function() {
                 childRef.remove();
 
                 window.close()
-                window.close()
+
+                var activeUsers = db.ref('activeUsers/')
+
+                activeUsers.once('value').then(function(snapshot) {
+
+                    if (!snapshot.hasChild(userName)) {
+                        
+                        document.body.innerHTML = 'Press Back again to exit~'
+                        
+                        
+                        
+                    }
+                })
+
+
+
+
 
             }
 
