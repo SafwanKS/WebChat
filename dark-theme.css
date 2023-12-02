@@ -53,7 +53,7 @@ body {
     color: #fff;
 }
 #headDiv {
-    height: 50px;
+    height: 55px;
     position: relative;
     top: 0;
     width: 100%;
@@ -62,21 +62,22 @@ body {
     align-items: center;
 }
 #headDiv #logo {
-    height: 35px;
-    width: 35px;
+    height: 50px;
+    width: 50px;
 }
 #homeBody {
     width: 100%;
     height: 100%;
+    display: flex;
     flex-direction: column;
     padding: 20px 8px 0 8px;
 }
 #search-box {
-    width: 100%;
+    align-self: center;
+    width: calc(100% - 15px);
     height: 30px;
     background: #212121;
     border: 0;
-    color: #fff;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -87,11 +88,13 @@ body {
 }
 #search-box:focus{
     text-align: left;
+    transition: text-align 0.3s ease;
 }
 #global-chaf-btn {
+    align-self: center;
     width: calc(100% - 15px);
     height: 50px;
-    background: #0e4971;
+    background: #2096F3;
     border: 0;
     border-radius: 10px;
     display: flex;

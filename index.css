@@ -143,8 +143,8 @@ button:hover {
     align-items: center;
 }
 #headDiv #logo {
-    height: 40px;
-    width: 40px;
+    height: 50px;
+    width: 50px;
 }
 #homeBody {
     width: 100%;
@@ -155,7 +155,7 @@ button:hover {
 }
 #search-box {
     align-self: center;
-    width: calc(100%);
+    width: calc(100% - 15px);
     height: 30px;
     background: #f1f1f1;
     border: 0;
