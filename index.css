@@ -134,7 +134,7 @@ button:hover {
     background: #fff;
 }
 #headDiv {
-    height: 50px;
+    height: 55px;
     position: relative;
     top: 0;
     width: 100%;
@@ -143,17 +143,19 @@ button:hover {
     align-items: center;
 }
 #headDiv #logo {
-    height: 35px;
-    width: 35px;
+    height: 40px;
+    width: 40px;
 }
 #homeBody {
     width: 100%;
     height: 100%;
+    display: flex;
     flex-direction: column;
     padding: 20px 8px 0 8px;
 }
 #search-box {
-    width: 100%;
+    align-self: center;
+    width: calc(100%);
     height: 30px;
     background: #f1f1f1;
     border: 0;
@@ -170,6 +172,7 @@ button:hover {
     transition: text-align 0.3s ease;
 }
 #global-chaf-btn {
+    align-self: center;
     width: calc(100% - 15px);
     height: 50px;
     background: #2096F3;
@@ -545,6 +548,7 @@ button:hover {
         color: #000;
         font-size: 16px;
         padding-left: 10px;
+        margin: auto 0;
     }
     #chatWindowScreen {
         width:;
