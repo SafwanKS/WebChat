@@ -40,7 +40,66 @@ body {
     align-items: center;
     background: #333;
 }
-
+#homeScreen {
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    background: #333;
+}
+#chatWindowScreen {
+    display: none;
+    width: 100%;
+    background: #333;
+    color: #fff;
+}
+#headDiv {
+    height: 50px;
+    position: relative;
+    top: 0;
+    width: 100%;
+    padding: 0 8px 0 8px;
+    display: flex;
+    align-items: center;
+}
+#headDiv #logo {
+    height: 35px;
+    width: 35px;
+}
+#homeBody {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    padding: 20px 8px 0 8px;
+}
+#search-box {
+    width: 100%;
+    height: 30px;
+    background: #212121;
+    border: 0;
+    color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    outline: none;
+    text-align: center;
+    transition: text-align 0.3s ease;
+}
+#search-box:focus{
+    text-align: left;
+}
+#global-chaf-btn {
+    width: calc(100% - 15px);
+    height: 50px;
+    background: #0e4971;
+    border: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    color: #fff;
+    padding-left: 15px;
+}
 #inputName {
     height: 50px;
     outline: none;
@@ -253,7 +312,7 @@ button:hover {
     width: 45px;
     height: 45px;
     border: none;
-    
+
     border-radius: 30px;
     background: #2096F3;
     outline: none;
@@ -267,7 +326,7 @@ button:hover {
     width: 100%;
     display: inline-block;
     margin-bottom: 0px;
-    
+
 }
 
 .message_inner_container {
@@ -301,7 +360,7 @@ button:hover {
     color: white;
 }
 
-#activeUsers{
+#activeUsers {
     min-width: 80px;
     height: 40px;
     background: #212121;
@@ -316,7 +375,7 @@ button:hover {
     justify-content: center;
     align-items: center;
 }
-#activeUsersCount{
+#activeUsersCount {
     font-size: 16px;
     color: white;
     margin-left: 7px;
@@ -439,7 +498,7 @@ button:hover {
     border-radius: 10px;
 }
 
-#greenCircle{
+#greenCircle {
     width: 7px;
     height: 7px;
     background: green;
@@ -447,28 +506,52 @@ button:hover {
     border-radius: 30px;
 
 }
-
+#globalChatTxt {
+    color: #fff;
+    font-size: 16px;
+    padding-left: 10px;
+}
 
 
 @media only screen and (min-width: 768px) {
-    #inputDiv,
-    #inputTextBack,
-    #iconsDivBack {
-        width: 100%;
+    #homeScreen {
+        background: #333;
+        width:;
+        flex: 1;
     }
-
+    #globalChatTxt {
+        color: #fff;
+        font-size: 16px;
+        padding-left: 10px;
+    }
+    #chatWindowScreen {
+        background: #333;
+        width:;
+        flex: 2;
+        display: block;
+    }
+    #aboutDiv {
+        position: relative;
+        top: 0;
+    }
+    #messagesDiv {
+        padding-top: 0;
+    }
+    #chatWindowScreen #inputDiv {
+        width: 65%;
+    }
     #inputTextBack {
         display: flex;
         align-items: center;
         padding-left: 10px;
-        width: 88%;
+        width: 85%;
     }
 
     #iconsDivBack {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-right: 10px;
-        width: 12%;
+        padding: 0 auto 0 auto;
+        width: 15%;
     }
 }

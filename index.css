@@ -1,4 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-size: 25px;
+    margin: none;
+    padding: none;
+    position: absolute;
+
+}
+
+
 html {
     scroll-behaviour: smooth;
     font-family: 'Josefin Sans', sans-serif;
@@ -10,7 +21,25 @@ body {
     padding: 0;
     width: 100%;
     height: 100%;
+    display: flex;
 }
+
+#backBtn {
+    width: 40px;
+    cursor: pointer;
+    height: 40px;
+    border-radius: 30px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: none;
+}
+
+#backBtn:hover {
+    background: #f1f1f1;
+}
+
 #splashScreen {
     width: 100%;
     height: 100%;
@@ -93,10 +122,64 @@ button:hover {
     display: flex;
 
 }
-#aboutDiv #logo {
-    width: 45px;
-    height: 45px;
-    margin-left: 10px;
+#homeScreen {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+}
+#chatWindowScreen {
+    display: none;
+    width: 100%;
+
+    background: #fff;
+}
+#headDiv {
+    height: 50px;
+    position: relative;
+    top: 0;
+    width: 100%;
+    padding: 0 8px 0 8px;
+    display: flex;
+    align-items: center;
+}
+#headDiv #logo {
+    height: 35px;
+    width: 35px;
+}
+#homeBody {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    padding: 20px 8px 0 8px;
+}
+#search-box {
+    width: 100%;
+    height: 30px;
+    background: #f1f1f1;
+    border: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    outline: none;
+    text-align: center;
+    transition: text-align 0.3s ease;
+}
+#search-box:focus{
+    text-align: left;
+    transition: text-align 0.3s ease;
+}
+#global-chaf-btn {
+    width: calc(100% - 15px);
+    height: 50px;
+    background: #2096F3;
+    border: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    color: #fff;
+    padding-left: 15px;
 }
 #aboutDiv span {
     flex: 1;
@@ -409,7 +492,7 @@ button:hover {
     margin-top: 10px;
 }
 
-#bottom-sheet #body li{
+#bottom-sheet #body li {
     background: #f2f2f2;
     width: 90%;
     margin: 0 auto 0;
@@ -419,7 +502,7 @@ button:hover {
     display: flex;
     align-items: center;
     border-radius: 10px;
-    
+
 }
 
 #greenCircle {
@@ -431,22 +514,67 @@ button:hover {
 
 }
 
+#toast-container {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    max-width: 300px;
+    background-color: #333;
+    color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    display: none;
+    z-index: 3;
+}
+#globalChatTxt {
+    color: #000;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
 @media only screen and (min-width: 768px) {
-    #inputDiv {
-        width: 100%;
+    #homeScreen {
+        width:;
+        flex: 1;
+        position: relative;
+    }
+    #globalChatScreen{
+        padding-left: 10px;
+    }
+    #globalChatTxt {
+        color: #000;
+        font-size: 16px;
+        padding-left: 10px;
+    }
+    #chatWindowScreen {
+        width:;
+        flex: 2;
+        display: block;
+    }
+    #aboutDiv {
+        position: relative;
+        padding-left: 10px;
+        top: 0;
+    }
+    #messagesDiv {
+        padding-left: 10px;
+        padding-top: 0;
+    }
+    #chatWindowScreen #inputDiv {
+        width: 65%;
     }
     #inputTextBack {
         display: flex;
         align-items: center;
         padding-left: 10px;
-        width: 88%;
+        width: 85%;
     }
 
     #iconsDivBack {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-right: 10px;
-        width: 12%;
+        padding: 0 auto 0 auto;
+        width: 15%;
     }
 }

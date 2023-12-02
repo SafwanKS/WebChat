@@ -1,8 +1,3 @@
-if (window.innerWidth >= 768) {
-    // Code for larger screens (laptops and above)
-} else {
-    // Code for smaller screens
-}
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
         navigator.serviceWorker
@@ -263,17 +258,10 @@ window.onload = function() {
 
         }
 
-        chat() {
 
-            document.body.innerHTML = ''
 
-            this.info()
 
-            this.messages()
-
-            this.inputSec()
-
-            this.refresh_chat()
+        home() {
 
             var userName = this.get_name()
 
@@ -298,24 +286,139 @@ window.onload = function() {
             });
 
 
+            document.body.innerHTML = ''
+
+            var parent = this
+
+            var homeScreen = document.createElement('div')
+
+            homeScreen.id = 'homeScreen'
+
+            var headDiv = document.createElement('div')
+
+            headDiv.setAttribute('id',
+                'headDiv')
+
+            var logo = document.createElement('img')
+
+            logo.id = 'logo'
+
+            logo.src = 'logo.png'
+
+            var homeBody = document.createElement('div')
+
+            homeBody.id = 'homeBody'
+
+            const searchBoxInput = document.createElement('input');
+            searchBoxInput.type = 'text';
+            searchBoxInput.id = 'search-box';
+            searchBoxInput.placeholder = 'Search users';
+
+
+            const globalChatBtn = document.createElement('div');
+            globalChatBtn.id = 'global-chaf-btn';
+
+        
+            const globalChatHeading = document.createElement('h3');
+            globalChatHeading.textContent = 'Global Chat';
+
+            globalChatBtn.onclick = function() {
+
+                if (!(window.innerWidth >= 768)) {
+                    window.history.pushState({
+                        id: 2
+                    },
+                        null,
+                        '?q=Global_Chat')
+                    localStorage.setItem('screen',
+                        'Global_Chat')
+                }
+
+                parent.global_chat()
+
+            }
+
+            headDiv.appendChild(logo)
+
+            homeScreen.appendChild(headDiv)
+
+            homeBody.appendChild(searchBoxInput)
+            
+            globalChatBtn.appendChild(globalChatHeading)
+
+            homeBody.appendChild(globalChatBtn)
+
+            homeScreen.appendChild(homeBody)
+
+            document.body.appendChild(homeScreen)
         }
 
-        profile() {}
+        chatWindow() {
 
-        info() {
+            var chatWindowScreen = document.createElement('div')
+
+            chatWindowScreen.setAttribute('id',
+                'chatWindowScreen')
+
+            document.body.appendChild(chatWindowScreen)
+
+        }
+
+
+        global_chat() {
+
+
+
+            document.getElementById('chatWindowScreen').innerHTML = ''
+
+            if (window.innerWidth >= 768) {} else {
+
+                document.body.innerHTML = ''
+
+                app.chatWindow()
+
+                this.bottomSheet()
+
+            }
+
+
+
+            var globalChatScreen = document.createElement('div')
+
+            globalChatScreen.id = 'globalChatScreen'
 
             var aboutDiv = document.createElement('div')
 
             aboutDiv.setAttribute('id',
                 'aboutDiv')
 
-            var logo = document.createElement('img')
+            var backBtn = document.createElement('div')
 
-            logo.setAttribute('src',
-                'logo.png')
+            backBtn.setAttribute('id', 'backBtn')
 
-            logo.setAttribute('id',
-                'logo')
+            var backIcon = document.createElement('span')
+
+            backIcon.classList.add("material-symbols-outlined");
+
+            backIcon.textContent = "arrow_back_ios_new"
+
+            backBtn.appendChild(backIcon)
+
+            if (window.innerWidth >= 768) {
+                backBtn.style.display = 'none'
+            }
+
+            backBtn.onclick = function() {
+                history.back()
+            }
+
+            var globalChatTxt = document.createElement('p')
+
+            globalChatTxt.setAttribute('id', 'globalChatTxt')
+
+            globalChatTxt.textContent = 'Global Chat'
+
+
 
             var activeUsersDiv = document.createElement('div')
 
@@ -323,7 +426,9 @@ window.onload = function() {
                 'activeUsers')
 
             activeUsersDiv.onclick = () => {
+
                 this.showBottomSheetView()
+
             }
 
             var circle = document.createElement('div')
@@ -351,20 +456,6 @@ window.onload = function() {
                     console.log(error);
 
                 });
-
-
-
-            var installAppBtn = document.createElement('div')
-
-            installAppBtn.setAttribute('id',
-                'installAppBtn')
-
-            var installTxt = document.createElement('p')
-
-            installTxt.setAttribute('id',
-                'installTxt')
-
-            installTxt.innerHTML = 'Install App'
 
             var modeBack = document.createElement('div')
 
@@ -418,31 +509,6 @@ window.onload = function() {
 
             }
 
-            /* installAppBtn.onclick = () => {
-
-                Notification.requestPermission(function(result) {
-
-                    if (result === 'granted') {
-
-                        navigator.serviceWorker.ready.then(function(registration) {
-
-                            registration.showNotification('Web Chat', {
-
-                                body: '1 new messaged',
-                                icon: 'logo.png',
-                                badge: 'badge.png',
-                                tag: ''
-
-                            });
-
-                        });
-
-                    }
-
-                });
-
-            }*/
-
 
             var accInfo = document.createElement('div')
 
@@ -465,7 +531,9 @@ window.onload = function() {
 
 
 
-            aboutDiv.appendChild(logo)
+            aboutDiv.appendChild(backBtn)
+
+            aboutDiv.appendChild(globalChatTxt)
 
             aboutDiv.appendChild(span)
 
@@ -479,9 +547,6 @@ window.onload = function() {
 
             aboutDiv.appendChild(activeUsersDiv)
 
-            // installAppBtn.appendChild(installTxt)
-
-            //  aboutDiv.appendChild(installAppBtn)
 
             accInfo.appendChild(profile)
 
@@ -489,23 +554,12 @@ window.onload = function() {
 
             aboutDiv.appendChild(accInfo)
 
-            document.body.appendChild(aboutDiv)
-
-        }
-
-        messages() {
-
             var messagesDiv = document.createElement('div')
 
             messagesDiv.setAttribute('id',
                 'messagesDiv')
 
-            document.body.appendChild(messagesDiv)
 
-
-        }
-
-        inputSec() {
 
             var parent = this
 
@@ -619,13 +673,24 @@ window.onload = function() {
 
             inputDiv.appendChild(iconsDivBack)
 
-            document.body.appendChild(inputDiv)
+            globalChatScreen.appendChild(aboutDiv)
 
+            globalChatScreen.appendChild(messagesDiv)
+
+            globalChatScreen.appendChild(inputDiv)
+
+            var chatWindowScreen = document.getElementById('chatWindowScreen')
+
+            chatWindowScreen.style.display = 'block'
+
+            chatWindowScreen.appendChild(globalChatScreen)
+
+            this.refresh_chat()
 
 
         }
 
-
+        profile() {}
 
         get_name() {
 
@@ -713,11 +778,11 @@ window.onload = function() {
 
             }
 
-            db.ref('chats/').once('value', function(message_object) {
+            db.ref('global_chat/chats/').once('value', function(message_object) {
 
                 var index = parseFloat(message_object.numChildren()) + 1
 
-                db.ref('chats/' + `message_${index}`).set({
+                db.ref('global_chat/chats/' + `message_${index}`).set({
 
                     name: parent.get_name(),
 
@@ -743,63 +808,10 @@ window.onload = function() {
 
         }
 
-        /*  sendNotificationToAll(message) {
-
-            const payload = {
-
-                notification: {
-
-                    title: 'New Message',
-
-                    body: message,
-
-                    icon: 'icon.png',
-
-                    badge: 'badge.png',
-
-                },
-
-                data: {},
-            };
-
-            messaging.send(payload)
-
-            .then(function() {
-
-                console.log('Notification sent successfully.');
-            })
-
-            .catch(function(error) {
-
-                console.log('Error sending notification:', error);
-
-            });
-
-        }
-
-        displayNotification(payload) {
-            const options = {
-                body: payload.notification.body,
-                icon: payload.notification.icon,
-            };
-
-            // Check if the browser supports notifications
-            if ('Notification' in window) {
-                // Request permission to display notifications
-                Notification.requestPermission().then(function (permission) {
-                    if (permission === 'granted') {
-                        // Display the notification
-                        new Notification(payload.notification.title, options);
-                    }
-                });
-            }
-        }
-*/
-
-
         bottomSheet() {
+
             const bottomSheet = document.createElement('div');
-            bottomSheet.id = 'bottom-sheet';
+            bottomSheet.setAttribute('id', 'bottom-sheet')
 
             const sheetOverlay = document.createElement('div');
             sheetOverlay.id = 'sheet-overlay';
@@ -850,39 +862,51 @@ window.onload = function() {
 
 
             body.appendChild(h4Element);
+
             body.appendChild(activeUsersList)
+
             content.appendChild(body);
 
             bottomSheet.appendChild(sheetOverlay);
+
             bottomSheet.appendChild(content);
+
             document.body.appendChild(bottomSheet)
+
         }
 
         showBottomSheetView() {
 
-            localStorage.setItem('screen', 'btsheet')
-
-            localStorage.setItem('showBottomSheet', 'true')
-
             var bottomSheetView = document.getElementById('bottom-sheet');
 
-            bottomSheetView.classList.add('show');
+            if (bottomSheetView) {
 
-            window.history.pushState({
-                id: 2
-            }, null, '?q=bottomSheet')
+                localStorage.setItem('screen', 'btsheet')
 
+                localStorage.setItem('showBottomSheet', 'true')
+
+
+                bottomSheetView.classList.add('show');
+
+                window.history.pushState({
+                    id: 3
+                }, null, '?q=bottomSheet')
+            } else {
+                console.log('error')
+            }
         }
 
         hideBottomSheet() {
 
-            localStorage.setItem('screen', 'chat')
+            localStorage.setItem('screen', 'Global_Chat')
 
             localStorage.removeItem('showBottomSheet')
 
             var bottomSheetView = document.getElementById('bottom-sheet');
 
             bottomSheetView.classList.remove('show');
+
+
 
         }
 
@@ -894,10 +918,7 @@ window.onload = function() {
 
             var chat_content_container = document.getElementById('messagesDiv')
 
-
-            // Get the chats from firebase
-
-            db.ref('chats/').on('value',
+            db.ref('global_chat/chats/').on('value',
                 function(messages_object) {
 
                     // When we get the data clear chat_content_container
@@ -911,14 +932,6 @@ window.onload = function() {
                         return
 
                     }
-
-
-                    // OK! SO IF YOU'RE A ROOKIE CODER. THIS IS GOING TO BE
-
-                    // SUPER EASY-ISH! I THINK. MAYBE NOT. WE'LL SEE!
-
-
-                    // convert the message object values to an array.
 
                     var messages = Object.values(messages_object.val());
 
@@ -1128,19 +1141,21 @@ window.onload = function() {
         var app = new WEB_CHAT();
 
         app.splash()
-    //    app.toast()
-        
+
         setTimeout(function() {
 
             if (app.get_name() != null) {
 
                 window.history.pushState({
                     id: 1
-                }, null, '?q=Global_Chat')
-                localStorage.setItem('screen', 'chat')
-                app.chat()
+                }, null, '?q=home')
+                localStorage.setItem('screen', 'home')
+
+                app.home()
+
+                app.chatWindow()
+
                 app.bottomSheet()
-                
 
             } else {
 
@@ -1167,7 +1182,18 @@ window.onload = function() {
 
             }
 
-            if (screen == 'chat') {
+
+
+            if (screen == 'Global_Chat') {
+
+                app.home()
+
+                app.chatWindow()
+
+                localStorage.setItem('screen', 'home')
+            }
+
+            if (screen == 'home') {
 
                 console.log('yes')
 
@@ -1177,18 +1203,16 @@ window.onload = function() {
 
                 childRef.remove();
 
-                window.close()
-
                 var activeUsers = db.ref('activeUsers/')
 
                 activeUsers.once('value').then(function(snapshot) {
 
                     if (!snapshot.hasChild(userName)) {
-                        
+
+                        history.replaceState(null, null, window.location.href);
+
                         document.body.innerHTML = 'Press Back again to exit~'
-                        
-                        
-                        
+
                     }
                 })
 
