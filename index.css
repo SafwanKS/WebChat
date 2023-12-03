@@ -134,17 +134,27 @@ button:hover {
     background: #fff;
 }
 #headDiv {
-    height: 55px;
+    height: 60px;
     position: relative;
-    top: 0;
     width: 100%;
     padding: 0 8px 0 8px;
     display: flex;
     align-items: center;
 }
 #headDiv #logo {
-    height: 50px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
+    
+}
+#headDiv h2{
+    margin-left: 10px;
+}
+#headDiv span{
+    flex: 1;
+}
+#headDiv img{
+    height: 45px;
+    width: 45px;
 }
 #homeBody {
     width: 100%;

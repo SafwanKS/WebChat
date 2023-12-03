@@ -304,6 +304,18 @@ window.onload = function() {
             logo.id = 'logo'
 
             logo.src = 'logo.png'
+            
+            var heading = document.createElement('h2')
+            
+            heading.textContent = 'Chats'
+            
+            var gap = document.createElement('span')
+            
+            var profilePic = document.createElement('img')
+            
+            profilePic.id = 'profilePic'
+            
+            profilePic.src = 'profile.png'
 
             var homeBody = document.createElement('div')
 
@@ -339,6 +351,12 @@ window.onload = function() {
             }
 
             headDiv.appendChild(logo)
+            
+            headDiv.appendChild(heading)
+            
+            headDiv.appendChild(gap)
+            
+            headDiv.appendChild(profilePic)
 
             homeScreen.appendChild(headDiv)
 
