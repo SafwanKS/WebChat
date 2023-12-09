@@ -52,6 +52,7 @@ body {
     background: #333;
     color: #fff;
 }
+
 #headDiv {
     height: 55px;
     position: relative;
@@ -73,6 +74,8 @@ body {
     padding: 20px 8px 0 8px;
 }
 #search-box {
+    min-height: 30px;
+    color: #fff;
     align-self: center;
     width: calc(100% - 15px);
     height: 30px;
@@ -152,7 +155,7 @@ button:hover {
     position: fixed;
 }
 
-#messagesDiv {
+#globalMessagesDiv {
     width: 100%;
     height: calc(100vh - 105px);
     background: #333;
@@ -514,8 +517,67 @@ button:hover {
     font-size: 16px;
     padding-left: 10px;
 }
+.userItem {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    background: #212121;
+    border-radius: 30px;
+}
 
+.userImg {
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
 
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+.loading-box {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+.loader {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    position: relative;
+}
+.loader::after,
+.loader::before {
+    content: '';
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: grey;
+    position: absolute;
+    left: 0;
+    top: 0;
+    animation: animloader 2s linear infinite;
+}
+.loader::after {
+    animation-delay: 0s;
+}
+
+@keyframes animloader {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
 @media only screen and (min-width: 768px) {
     #homeScreen {
         background: #333;
@@ -533,16 +595,30 @@ button:hover {
         flex: 2;
         display: block;
     }
+    #noChatWindow{
+    height: 100%;
+    width: 100%;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
     #aboutDiv {
         position: relative;
         top: 0;
     }
-    #messagesDiv {
+    #globalMessagesDiv {
         padding-top: 0;
     }
     #chatWindowScreen #inputDiv {
         width: 65%;
     }
+        #noChatOpenedBodyTxt{
+    color: grey;
+    text-align: center;
+    
+}
     #inputTextBack {
         display: flex;
         align-items: center;

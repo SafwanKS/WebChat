@@ -140,6 +140,9 @@ window.onload = function() {
                 'join_btn')
 
             join_btn.innerHTML = 'Join'
+            
+            const randomUid = Math.floor(100000000000 + Math.random() * 900000000000);
+            
 
             const colorCodes = ["#8B0000",
                 // Deep Red
@@ -203,23 +206,44 @@ window.onload = function() {
 
                         if (isClickable == true) {
 
-                            var enteredUsername = inputName.value;
+                            var enteredUsername = inputName.value.toLowerCase()
 
                             db.ref('users/' + enteredUsername).once('value', function(snapshot) {
+
                                 if (snapshot.exists()) {
+
                                     alert('Username already exists. Choose another.');
+
                                 } else {
 
                                     parent.save_name(enteredUsername);
+
                                     parent.save_color(parent.userColor);
+
                                     parent.save_theme('light');
+                                    
+                                    localStorage.setItem('uid', randomUid)
+
                                     db.ref('users/' + enteredUsername).set({
+
+                                        name: enteredUsername,
+
                                         color: parent.userColor,
+                                        
+                                        uid: randomUid,
+
+
+
                                         theme: 'light',
+
                                         blocked: false,
+
                                         verified: false
+
                                     });
+
                                     location.reload();
+
                                 }
 
                             });
@@ -290,6 +314,8 @@ window.onload = function() {
 
             var parent = this
 
+            console.log(parent)
+
             var homeScreen = document.createElement('div')
 
             homeScreen.id = 'homeScreen'
@@ -304,17 +330,17 @@ window.onload = function() {
             logo.id = 'logo'
 
             logo.src = 'logo.png'
-            
+
             var heading = document.createElement('h2')
-            
+
             heading.textContent = 'Chats'
-            
+
             var gap = document.createElement('span')
-            
+
             var profilePic = document.createElement('img')
-            
+
             profilePic.id = 'profilePic'
-            
+
             profilePic.src = 'profile.png'
 
             var homeBody = document.createElement('div')
@@ -322,17 +348,22 @@ window.onload = function() {
             homeBody.id = 'homeBody'
 
             const searchBoxInput = document.createElement('input');
+
             searchBoxInput.type = 'text';
+
             searchBoxInput.id = 'search-box';
+
             searchBoxInput.placeholder = 'Search users';
 
 
             const globalChatBtn = document.createElement('div');
             globalChatBtn.id = 'global-chaf-btn';
 
-        
+
             const globalChatHeading = document.createElement('h3');
             globalChatHeading.textContent = 'Global Chat';
+
+
 
             globalChatBtn.onclick = function() {
 
@@ -350,21 +381,179 @@ window.onload = function() {
 
             }
 
+            var typingTimer;
+
+            var doneTypingInterval = 1000;
+
+
+            var userlist = document.createElement('div')
+
+            userlist.id = 'userList'
+
+            userlist.setAttribute('class', 'userList')
+
+            var noChatListDiv = document.createElement('div')
+
+            noChatListDiv.id = 'noChatListDiv'
+
+            var chatBubbleIcon = document.createElement('span')
+
+            chatBubbleIcon.className = 'material-symbols-outlined'
+
+            chatBubbleIcon.innerHTML = '&#xf189;'
+            
+            var noChatHeadTxt = document.createElement('h4')
+            
+            var noChatBodyTxt = document.createElement('p')
+
+            noChatListDiv.appendChild(chatBubbleIcon)
+
+
+            var loading_box = document.createElement('div')
+
+            loading_box.setAttribute('id', "loading-box")
+
+            loading_box.setAttribute('class', 'loading-box')
+
+            var loadingTxt = document.createElement('p')
+
+            loadingTxt.id = 'loadingTxt'
+
+            loadingTxt.textContent = 'Searching...'
+
+            var loader = document.createElement('span')
+
+            loader.setAttribute('class', 'loader')
+
+            loading_box.appendChild(loadingTxt)
+
+            loading_box.appendChild(loader)
+
+
+            searchBoxInput.addEventListener('input', function() {
+
+                headDiv.style.display = 'none';
+                globalChatBtn.style.display = 'none';
+                userlist.innerHTML = ''
+                userlist.appendChild(loading_box)
+
+                if (searchBoxInput.value == null || searchBoxInput.value == '') {
+                    headDiv.style.display = 'flex';
+                    globalChatBtn.style.display = 'block';
+                    document.getElementById('userList').innerHTML = '';
+                    userlist.appendChild(noChatListDiv)
+
+                }
+
+                clearTimeout(typingTimer);
+
+                typingTimer = setTimeout(function() {
+
+                    userlist.innerHTML = '';
+
+                    var inputValue = searchBoxInput.value.toLowerCase();
+
+                    if (inputValue !== null && inputValue.trim() !== '') {
+                        var usersRef = firebase.database().ref('users');
+
+                        userlist.appendChild(loading_box)
+
+                        localStorage.setItem('screen', 'search')
+
+                        window.history.pushState({
+                            id: 4
+                        }, null, '?q=search')
+
+                        usersRef.once("value", function(snapshot) {
+
+                            userlist.removeChild(loading_box)
+
+                            var userFound = false;
+
+
+                            snapshot.forEach(function(childSnapshot) {
+
+
+
+                                var userData = childSnapshot.val();
+                                var userDisplayName = userData.name;
+                                var userProfile = userData.profile || 'profile.png';
+
+                                if (userDisplayName && userDisplayName.includes(inputValue)) {
+                                    userFound = true
+                                    var userItem = document.createElement('div');
+                                    userItem.className = 'userItem';
+
+                                    var userImg = document.createElement('img');
+                                    userImg.src = userProfile;
+                                    userImg.className = 'userImg';
+
+                                    var userInfo = document.createElement('div');
+                                    userInfo.className = 'userInfo';
+
+                                    var displayNameElement = document.createElement('p');
+                                    displayNameElement.textContent = userDisplayName;
+
+                                    userInfo.appendChild(displayNameElement);
+                                    userItem.appendChild(userImg);
+                                    userItem.appendChild(userInfo);
+
+                                    userlist.appendChild(userItem);
+
+                                    userItem.onclick = () => {
+                                        parent.chat(userDisplayName)
+                                    }
+
+                                }
+                            });
+                            if (!userFound) {
+
+                                userlist.innerHTML = '<p>No users found</p>'
+
+                            }
+                        });
+                    } else {
+
+                        localStorage.setItem('screen', 'home')
+                        headDiv.style.display = 'flex';
+                        globalChatBtn.style.display = 'block';
+                        userlist.appendChild(noChatListDiv)
+
+                        userlist.removeChild(loading_box)
+
+
+                    }
+                },
+                    doneTypingInterval);
+            });
+
+            function updateUsersList(parent) {
+
+                var parent = parent;
+
+
+            }
+
+
             headDiv.appendChild(logo)
-            
+
             headDiv.appendChild(heading)
-            
+
             headDiv.appendChild(gap)
-            
+
             headDiv.appendChild(profilePic)
 
             homeScreen.appendChild(headDiv)
 
             homeBody.appendChild(searchBoxInput)
-            
+
             globalChatBtn.appendChild(globalChatHeading)
 
             homeBody.appendChild(globalChatBtn)
+
+            userlist.appendChild(noChatListDiv)
+
+            homeBody.appendChild(userlist)
 
             homeScreen.appendChild(homeBody)
 
@@ -378,16 +567,127 @@ window.onload = function() {
             chatWindowScreen.setAttribute('id',
                 'chatWindowScreen')
 
+            if (window.innerWidth >= 768) {
+
+                var noChatWindow = document.createElement('div')
+
+                noChatWindow.id = 'noChatWindow'
+
+                var noChatOpenedHeadTxt = document.createElement('h3')
+
+                noChatOpenedHeadTxt.innerHTML = "It's nice to chat with someone"
+
+                var noChatOpenedBodyTxt = document.createElement('p')
+
+                noChatOpenedBodyTxt.id = 'noChatOpenedBodyTxt'
+
+                noChatOpenedBodyTxt.innerHTML = 'Pick a chat from the left menu <br> and start your conversation'
+
+                noChatWindow.appendChild(noChatOpenedHeadTxt)
+
+                noChatWindow.appendChild(noChatOpenedBodyTxt)
+
+                chatWindowScreen.appendChild(noChatWindow)
+
+
+            }
+
+
             document.body.appendChild(chatWindowScreen)
+
+        }
+
+        chat(userId) {
+
+            var chatWindowScreen = document.getElementById('chatWindowScreen')
+
+            chatWindowScreen.innerHTML = ''
+
+
+            if (window.innerWidth >= 768) {} else {
+
+                document.body.innerHTML = ''
+
+                app.chatWindow()
+
+            }
+
+            var chatScreen = document.createElement('div')
+
+            chatScreen.id = 'chatScreen'
+
+            var username = userId;
+
+            var aboutDiv = document.createElement('div')
+
+            aboutDiv.id = 'aboutDiv'
+
+            var backBtn = document.createElement('div')
+
+            backBtn.setAttribute('id', 'backBtn')
+
+            var backIcon = document.createElement('span')
+
+            backIcon.classList.add("material-symbols-outlined");
+
+            backIcon.textContent = "arrow_back_ios_new"
+
+            backBtn.appendChild(backIcon)
+
+            if (window.innerWidth >= 768) {
+                backBtn.style.display = 'none'
+            }
+
+            backBtn.onclick = function() {
+                history.back()
+            }
+            
+            var profile = document.createElement('img')
+            
+            profile.id = 'profilePic'
+
+            var usernameTxt = document.createElement('p')
+
+            usernameTxt.setAttribute('id', 'usernameTxt')
+
+            usernameTxt.textContent = username
+
+            aboutDiv.appendChild(backBtn)
+            
+            aboutDiv.appendChild(profile)
+            
+            aboutDiv.appendChild(usernameTxt)
+
+            var messageDiv = document.createElement('div')
+
+            messageDiv.id = 'messageDiv'
+
+            var inputDiv = document.createElement('div')
+
+            inputDiv.id = 'inputDiv'
+
+            chatScreen.appendChild(aboutDiv)
+
+            chatScreen.appendChild(messageDiv)
+
+            chatScreen.appendChild(inputDiv)
+
+            var chatWindowScreen = document.getElementById('chatWindowScreen')
+
+            chatWindowScreen.style.display = 'block'
+
+            chatWindowScreen.appendChild(chatScreen)
+
 
         }
 
 
         global_chat() {
 
+            var chatWindowScreen = document.getElementById('chatWindowScreen')
 
+            chatWindowScreen.innerHTML = ''
 
-            document.getElementById('chatWindowScreen').innerHTML = ''
 
             if (window.innerWidth >= 768) {} else {
 
@@ -572,10 +872,10 @@ window.onload = function() {
 
             aboutDiv.appendChild(accInfo)
 
-            var messagesDiv = document.createElement('div')
+            var globalMessagesDiv = document.createElement('div')
 
-            messagesDiv.setAttribute('id',
-                'messagesDiv')
+            globalMessagesDiv.setAttribute('id',
+                'globalMessagesDiv')
 
 
 
@@ -693,7 +993,30 @@ window.onload = function() {
 
             globalChatScreen.appendChild(aboutDiv)
 
-            globalChatScreen.appendChild(messagesDiv)
+
+            var loading_box = document.createElement('div')
+
+            loading_box.setAttribute('id', "loading-box")
+
+            loading_box.setAttribute('class', 'loading-box')
+
+            var loadingTxt = document.createElement('p')
+
+            loadingTxt.id = 'loadingTxt'
+
+            loadingTxt.textContent = 'Loading...'
+
+            var loader = document.createElement('span')
+
+            loader.setAttribute('class', 'loader')
+
+            loading_box.appendChild(loadingTxt)
+
+            loading_box.appendChild(loader)
+
+            globalMessagesDiv.appendChild(loading_box)
+
+            globalChatScreen.appendChild(globalMessagesDiv)
 
             globalChatScreen.appendChild(inputDiv)
 
@@ -742,6 +1065,7 @@ window.onload = function() {
             return localStorage.getItem('color');
 
         }
+
 
         save_theme(theme) {
 
@@ -934,7 +1258,7 @@ window.onload = function() {
 
         refresh_chat() {
 
-            var chat_content_container = document.getElementById('messagesDiv')
+            var chat_content_container = document.getElementById('globalMessagesDiv')
 
             db.ref('global_chat/chats/').on('value',
                 function(messages_object) {
@@ -1136,13 +1460,13 @@ window.onload = function() {
                             message_container.append(message_inner_container)
 
 
-                            messagesDiv.append(message_container)
+                            globalMessagesDiv.append(message_container)
 
                         });
 
 
 
-                        messagesDiv.scrollTop = messagesDiv.scrollHeight + 20;
+                        globalMessagesDiv.scrollTop = globalMessagesDiv.scrollHeight + 20;
 
                     })
 
@@ -1200,6 +1524,14 @@ window.onload = function() {
 
             }
 
+            if (screen == 'search') {
+
+                app.home()
+
+                app.chatWindow()
+
+                localStorage.setItem('screen', 'home')
+            }
 
 
             if (screen == 'Global_Chat') {
