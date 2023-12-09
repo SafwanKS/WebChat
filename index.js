@@ -870,7 +870,7 @@ window.onload = function() {
 
             accInfo.appendChild(accName)
 
-            aboutDiv.appendChild(accInfo)
+           // aboutDiv.appendChild(accInfo)
 
             var globalMessagesDiv = document.createElement('div')
 
