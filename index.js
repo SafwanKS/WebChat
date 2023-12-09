@@ -622,23 +622,19 @@ window.onload = function() {
 
             aboutDiv.id = 'aboutDiv'
 
-            var backBtn = document.createElement('div')
-
-            backBtn.setAttribute('id', 'backBtn')
-
             var backIcon = document.createElement('span')
 
             backIcon.classList.add("material-symbols-outlined");
 
             backIcon.textContent = "arrow_back_ios_new"
 
-            backBtn.appendChild(backIcon)
+
 
             if (window.innerWidth >= 768) {
-                backBtn.style.display = 'none'
+                backIcon.style.display = 'none'
             }
 
-            backBtn.onclick = function() {
+            backIcon.onclick = function() {
                 history.back()
             }
             
@@ -652,7 +648,7 @@ window.onload = function() {
 
             usernameTxt.textContent = username
 
-            aboutDiv.appendChild(backBtn)
+            aboutDiv.appendChild(backIcon)
             
             aboutDiv.appendChild(profile)
             
@@ -710,9 +706,6 @@ window.onload = function() {
             aboutDiv.setAttribute('id',
                 'aboutDiv')
 
-            var backBtn = document.createElement('div')
-
-            backBtn.setAttribute('id', 'backBtn')
 
             var backIcon = document.createElement('span')
 
@@ -720,13 +713,13 @@ window.onload = function() {
 
             backIcon.textContent = "arrow_back_ios_new"
 
-            backBtn.appendChild(backIcon)
+
 
             if (window.innerWidth >= 768) {
-                backBtn.style.display = 'none'
+                backIcon.style.display = 'none'
             }
 
-            backBtn.onclick = function() {
+            backIcon.onclick = function() {
                 history.back()
             }
 
@@ -849,7 +842,7 @@ window.onload = function() {
 
 
 
-            aboutDiv.appendChild(backBtn)
+            aboutDiv.appendChild(backIcon)
 
             aboutDiv.appendChild(globalChatTxt)
 
