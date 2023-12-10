@@ -622,7 +622,7 @@ window.onload = function() {
 
             aboutDiv.id = 'aboutDiv'
 
-            var backIcon = document.createElement('span')
+            var backIcon = document.createElement('i')
 
             backIcon.classList.add("material-symbols-outlined");
 
@@ -641,18 +641,28 @@ window.onload = function() {
             var profile = document.createElement('img')
             
             profile.id = 'profilePic'
+            
+            profile.setAttribute('src', 'profile.png')
 
             var usernameTxt = document.createElement('p')
 
             usernameTxt.setAttribute('id', 'usernameTxt')
 
             usernameTxt.textContent = username
+            
+            var gap = document.createElement('span')
+            
+            var callBack = document.createElement('div')
+            
+            callBack.id = 'callBack'
 
             aboutDiv.appendChild(backIcon)
             
             aboutDiv.appendChild(profile)
             
             aboutDiv.appendChild(usernameTxt)
+            
+            aboutDiv.appendChild(gap)
 
             var messageDiv = document.createElement('div')
 
@@ -707,7 +717,7 @@ window.onload = function() {
                 'aboutDiv')
 
 
-            var backIcon = document.createElement('span')
+            var backIcon = document.createElement('i')
 
             backIcon.classList.add("material-symbols-outlined");
 
@@ -761,7 +771,7 @@ window.onload = function() {
 
                     activeUsersDiv.style.display = 'flex';
                     
-                    aboutDiv.removeChild(accInfo)
+                  //  aboutDiv.removeChild(accInfo)
 
                 },
                 function(error) {
@@ -850,7 +860,7 @@ window.onload = function() {
 
             aboutDiv.appendChild(span)
             
-            aboutDiv.appendChild(accInfo)
+         //   aboutDiv.appendChild(accInfo)
 
             aboutDiv.appendChild(modeBack)
 
