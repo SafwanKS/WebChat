@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+* {
+     box-sizing: border-box;
+}
 
 html {
     scroll-behavior: smooth;
@@ -71,7 +74,8 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 20px 8px 0 8px;
+    padding-top: 20px;
+    box-sizing: content-box;
 }
 #search-box {
     min-height: 30px;
@@ -598,7 +602,6 @@ button:hover {
     #noChatWindow{
     height: 100%;
     width: 100%;
-    background: red;
     display: flex;
     justify-content: center;
     align-items: center;

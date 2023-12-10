@@ -5,23 +5,23 @@
     font-size: 25px;
     margin: none;
     padding: none;
-    
 }
 
 * {
-    box-sizing: border-box;
+     box-sizing: border-box;
 }
 
 html {
     scroll-behaviour: smooth;
     font-family: 'Josefin Sans', sans-serif;
+
 }
 body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    
+     
 }
 
 #backBtn {
@@ -51,7 +51,6 @@ body {
 #logoImg {
     width: 80px;
     height: 80px;
-    margin: auto;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -105,7 +104,9 @@ button:hover {
     background: #fff;
     display: flex;
     align-items: center;
+    just
     position: fixed;
+    box-sizing: content-box;
 }
 #globalMessagesDiv {
     width: 100%;
@@ -166,7 +167,8 @@ button:hover {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 20px 8px 0 8px;
+    padding-top: 20px;
+    box-sizing: content-box;
 }
 #search-box {
     min-height: 30px;
@@ -537,7 +539,8 @@ button:hover {
 #globalChatTxt {
     color: #000;
     font-size: 16px;
-    padding-left: 10px;
+    padding: none;
+    margin: none;
 }
 .userItem {
     display: flex;
@@ -624,6 +627,7 @@ button:hover {
     display: flex;
     align-items: center;
     position: fixed;
+    box-sizing: content-box;
 }
 #messageDiv {
     width: 100%;

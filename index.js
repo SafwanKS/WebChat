@@ -760,6 +760,8 @@ window.onload = function() {
                     activeUsersCount.innerHTML = snapshot.numChildren() + ' online';
 
                     activeUsersDiv.style.display = 'flex';
+                    
+                    aboutDiv.removeChild(accInfo)
 
                 },
                 function(error) {
@@ -847,6 +849,8 @@ window.onload = function() {
             aboutDiv.appendChild(globalChatTxt)
 
             aboutDiv.appendChild(span)
+            
+            aboutDiv.appendChild(accInfo)
 
             aboutDiv.appendChild(modeBack)
 
@@ -859,11 +863,11 @@ window.onload = function() {
             aboutDiv.appendChild(activeUsersDiv)
 
 
-            accInfo.appendChild(profile)
+            //accInfo.appendChild(profile)
 
-            accInfo.appendChild(accName)
+            //accInfo.appendChild(accName)
 
-           // aboutDiv.appendChild(accInfo)
+            
 
             var globalMessagesDiv = document.createElement('div')
 
