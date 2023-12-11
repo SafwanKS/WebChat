@@ -140,9 +140,9 @@ window.onload = function() {
                 'join_btn')
 
             join_btn.innerHTML = 'Join'
-            
+
             const randomUid = Math.floor(100000000000 + Math.random() * 900000000000);
-            
+
 
             const colorCodes = ["#8B0000",
                 // Deep Red
@@ -221,7 +221,7 @@ window.onload = function() {
                                     parent.save_color(parent.userColor);
 
                                     parent.save_theme('light');
-                                    
+
                                     localStorage.setItem('uid', randomUid)
 
                                     db.ref('users/' + enteredUsername).set({
@@ -229,7 +229,7 @@ window.onload = function() {
                                         name: enteredUsername,
 
                                         color: parent.userColor,
-                                        
+
                                         uid: randomUid,
 
 
@@ -392,22 +392,6 @@ window.onload = function() {
 
             userlist.setAttribute('class', 'userList')
 
-            var noChatListDiv = document.createElement('div')
-
-            noChatListDiv.id = 'noChatListDiv'
-
-            var chatBubbleIcon = document.createElement('span')
-
-            chatBubbleIcon.className = 'material-symbols-outlined'
-
-            chatBubbleIcon.innerHTML = '&#xf189;'
-            
-            var noChatHeadTxt = document.createElement('h4')
-            
-            var noChatBodyTxt = document.createElement('p')
-
-            noChatListDiv.appendChild(chatBubbleIcon)
-
 
             var loading_box = document.createElement('div')
 
@@ -535,6 +519,108 @@ window.onload = function() {
             }
 
 
+            const userId = localStorage.getItem('name')
+
+            const inboxRef = db.ref(`inbox/${userId}`)
+
+            inboxRef.on('value', snapshot => {
+
+                var chatData = snapshot.val()
+                
+                console.log(chatData)
+
+                if (chatData) {
+                    
+                    userlist.innerHTML = ''
+
+                    snapshot.forEach(function(childSnapshot) {
+                        const userData = childSnapshot.val()
+                        var username = childSnapshot.key
+                        var profileUrl
+                        if (userData.profile) {
+                            profileUrl = userData.profile
+                        } else {
+                            profileUrl = 'profile.png'
+                        }
+                        var lastMessage = userData.last_message
+                        var chatListContainer = document.createElement('div')
+                        chatListContainer.classList.add('chat-list-container')
+                        var profileContainer = document.createElement('div')
+                        profileContainer.classList.add('profile-container')
+                        var infoContainer = document.createElement('div')
+                        infoContainer.classList.add('info-container')
+
+                        var nameContainer = document.createElement('div')
+                        nameContainer.classList.add('name-container')
+                        var messageContainer = document.createElement('div')
+                        messageContainer.classList.add('message-container')
+
+                        var profilePic = document.createElement('img')
+
+                        profilePic.classList.add('profile-pic')
+
+                        profilePic.src = profileUrl
+
+                        profileContainer.appendChild(profilePic)
+
+                        var usernameTxt = document.createElement('p')
+
+                        usernameTxt.textContent = username
+
+                        nameContainer.appendChild(usernameTxt)
+
+
+                        var messageTxt = document.createElement('p')
+
+                        messageTxt.textContent = lastMessage
+
+                        messageContainer.appendChild(messageTxt)
+
+                        infoContainer.appendChild(nameContainer)
+
+                        infoContainer.appendChild(messageContainer)
+
+                        chatListContainer.appendChild(profileContainer)
+
+                        chatListContainer.appendChild(infoContainer)
+                        
+                        userlist.appendChild(chatListContainer)
+                        
+                        chatListContainer.onclick = () => {
+                            parent.chat(username)
+                            window.history.pushState({
+                    id: 3
+                }, null, `?q=chat/${username}`)
+                localStorage.setItem('screen', 'chat')
+                        }
+
+
+                    })
+                } else {
+                    
+            var noChatListDiv = document.createElement('div')
+
+            noChatListDiv.id = 'noChatListDiv'
+
+            var chatBubbleIcon = document.createElement('span')
+
+            chatBubbleIcon.className = 'material-symbols-outlined'
+
+            chatBubbleIcon.innerHTML = '&#xf189;'
+
+            var noChatHeadTxt = document.createElement('h4')
+
+            var noChatBodyTxt = document.createElement('p')
+
+            noChatListDiv.appendChild(chatBubbleIcon)
+
+userlist.appendChild(noChatListDiv)
+                }
+            })
+
+
+
+
             headDiv.appendChild(logo)
 
             headDiv.appendChild(heading)
@@ -550,8 +636,6 @@ window.onload = function() {
             globalChatBtn.appendChild(globalChatHeading)
 
             homeBody.appendChild(globalChatBtn)
-
-            userlist.appendChild(noChatListDiv)
 
             homeBody.appendChild(userlist)
 
@@ -599,6 +683,14 @@ window.onload = function() {
 
         chat(userId) {
 
+            var udb = db.ref('users')
+
+            var chat1 = db.ref('chat1')
+
+            var chat2 = db.ref('chat2')
+
+            var idb = db.ref('inbox')
+
             var chatWindowScreen = document.getElementById('chatWindowScreen')
 
             chatWindowScreen.innerHTML = ''
@@ -616,7 +708,7 @@ window.onload = function() {
 
             chatScreen.id = 'chatScreen'
 
-            var username = userId;
+            var recieverUsername = userId;
 
             var aboutDiv = document.createElement('div')
 
@@ -628,8 +720,6 @@ window.onload = function() {
 
             backIcon.textContent = "arrow_back_ios_new"
 
-
-
             if (window.innerWidth >= 768) {
                 backIcon.style.display = 'none'
             }
@@ -637,32 +727,58 @@ window.onload = function() {
             backIcon.onclick = function() {
                 history.back()
             }
-            
+
             var profile = document.createElement('img')
-            
+
             profile.id = 'profilePic'
-            
+
             profile.setAttribute('src', 'profile.png')
 
             var usernameTxt = document.createElement('p')
 
             usernameTxt.setAttribute('id', 'usernameTxt')
 
-            usernameTxt.textContent = username
-            
+            usernameTxt.textContent = recieverUsername
+
             var gap = document.createElement('span')
-            
+
             var callBack = document.createElement('div')
-            
+
             callBack.id = 'callBack'
 
+            callBack.setAttribute('class', 'modeBack')
+
+            var callIcon = document.createElement('i')
+
+            callIcon.classList.add("material-symbols-outlined");
+
+            callIcon.textContent = "call"
+
+            var videoCallBack = document.createElement('div')
+
+            videoCallBack.classList.add('modeBack')
+
+            var videoCallIcon = document.createElement('i')
+
+            videoCallIcon.classList.add('material-symbols-outlined')
+
+            videoCallIcon.textContent = 'video_call'
+
             aboutDiv.appendChild(backIcon)
-            
+
             aboutDiv.appendChild(profile)
-            
+
             aboutDiv.appendChild(usernameTxt)
-            
+
             aboutDiv.appendChild(gap)
+
+            callBack.appendChild(callIcon)
+
+            aboutDiv.appendChild(callBack)
+
+            videoCallBack.appendChild(videoCallIcon)
+
+            aboutDiv.appendChild(videoCallBack)
 
             var messageDiv = document.createElement('div')
 
@@ -672,9 +788,129 @@ window.onload = function() {
 
             inputDiv.id = 'inputDiv'
 
+            var inputBack = document.createElement('div')
+
+            inputBack.id = 'inputBack'
+
+            var emojiBack = document.createElement('div')
+
+            emojiBack.id = 'emojiBack'
+
+            var emojiIcon = document.createElement('i')
+
+            emojiIcon.classList.add('material-symbols-outlined')
+
+            emojiIcon.textContent = 'sentiment_satisfied'
+
+            var messageText = document.createElement('textarea')
+
+            messageText.id = 'messageText'
+
+            messageText.rows = 1
+
+            messageText.placeholder = 'Message...'
+
+            messageText.addEventListener('input', function() {
+                this.rows = this.value.split('\n').length;
+                if (this.value.trim().length > 0) {
+                    micIcon.textContent = 'send'
+                } else {
+                    micIcon.textContent = 'mic'
+                }
+            })
+
+            var sendBtn = document.createElement('div')
+
+            sendBtn.id = 'sendBtn'
+
+            var micIcon = document.createElement('i')
+
+            micIcon.classList.add('material-symbols-outlined')
+
+            micIcon.textContent = 'mic'
+
+            sendBtn.onclick = () => {
+
+                if (messageText.value.trim().length > 0) {
+
+                    const messagePushTime = new Date();
+
+                    const sendMessage = {};
+
+                    const sendInbox = {};
+
+                    const messagePushKey = chat1.push().key;
+
+                    sendMessage.username = localStorage.getItem('name')
+
+                    sendMessage.push_time = String(messagePushTime.getTime());
+
+                    sendMessage.type = "MESSAGE";
+
+                    sendMessage.message = messageText.value;
+
+                    sendMessage.status = "SENT";
+
+                    sendMessage.key = messagePushKey;
+
+                    db.ref('chat1/' + messagePushKey).update(sendMessage)
+
+                    db.ref('chat2/' + messagePushKey).update(sendMessage)
+
+
+                    sendInbox.firstuser = localStorage.getItem('name')
+
+                    sendInbox.seconduser = recieverUsername;
+
+                    sendInbox.push_time = String(messagePushTime.getTime());
+
+                    sendInbox.last_message = messageText.value;
+
+                    db.ref('inbox/' + localStorage.getItem('name') + '/' + sendInbox.seconduser).update(sendInbox)
+
+                    sendInbox.firstuser = recieverUsername
+
+                    sendInbox.seconduser = localStorage.getItem('name')
+
+                    sendInbox.push_time = String(messagePushTime.getTime());
+
+                    sendInbox.last_message = messageText.value;
+
+
+                    db.ref('inbox/' + sendInbox.firstuser + '/' + sendInbox.seconduser).update(sendInbox)
+
+                    messageText.value = ''
+
+                    messageText.focus()
+
+
+
+
+                } else {}
+            }
+
+            chat1.on('child_added', (snapshot) => {
+                const childValue = snapshot.val()
+
+                console.log(`username: ${childValue.username}, message: ${childValue.message}`);
+            })
+
+
             chatScreen.appendChild(aboutDiv)
 
             chatScreen.appendChild(messageDiv)
+
+            emojiBack.appendChild(emojiIcon)
+
+            inputBack.appendChild(emojiBack)
+
+            inputBack.appendChild(messageText)
+
+            inputDiv.appendChild(inputBack)
+
+            sendBtn.appendChild(micIcon)
+
+            inputDiv.appendChild(sendBtn)
 
             chatScreen.appendChild(inputDiv)
 
@@ -770,8 +1006,8 @@ window.onload = function() {
                     activeUsersCount.innerHTML = snapshot.numChildren() + ' online';
 
                     activeUsersDiv.style.display = 'flex';
-                    
-                  //  aboutDiv.removeChild(accInfo)
+
+                    //  aboutDiv.removeChild(accInfo)
 
                 },
                 function(error) {
@@ -859,8 +1095,8 @@ window.onload = function() {
             aboutDiv.appendChild(globalChatTxt)
 
             aboutDiv.appendChild(span)
-            
-         //   aboutDiv.appendChild(accInfo)
+
+            //   aboutDiv.appendChild(accInfo)
 
             aboutDiv.appendChild(modeBack)
 
@@ -877,7 +1113,7 @@ window.onload = function() {
 
             //accInfo.appendChild(accName)
 
-            
+
 
             var globalMessagesDiv = document.createElement('div')
 
@@ -1539,6 +1775,16 @@ window.onload = function() {
 
                 localStorage.setItem('screen', 'home')
             }
+            
+                        if (screen == 'chat') {
+
+                app.home()
+
+                app.chatWindow()
+
+                localStorage.setItem('screen', 'home')
+            }
+
 
 
             if (screen == 'Global_Chat') {
@@ -1567,6 +1813,12 @@ window.onload = function() {
                     if (!snapshot.hasChild(userName)) {
 
                         history.replaceState(null, null, window.location.href);
+
+                        for (var i = 1; i <= 10; i++) {
+                            history.back()
+                        }
+
+
 
                         document.body.innerHTML = 'Press Back again to exit~'
 

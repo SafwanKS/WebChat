@@ -66,8 +66,8 @@ body {
     align-items: center;
 }
 #headDiv #logo {
-    height: 50px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
 }
 #homeBody {
     width: 100%;
@@ -519,7 +519,7 @@ button:hover {
 #globalChatTxt {
     color: #fff;
     font-size: 16px;
-    padding-left: 10px;
+    
 }
 .userItem {
     display: flex;
@@ -570,6 +570,144 @@ button:hover {
 }
 .loader::after {
     animation-delay: 0s;
+}
+#aboutDiv {
+    height: 50px;
+    width: 100%;
+    background: #333;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    box-sizing: content-box;
+}
+#messageDiv {
+    width: 100%;
+    height: calc(100vh - 105px);
+    background: #333;
+    padding-top: 35px;
+    padding-left: 10px;
+    overflow-y: auto;
+    padding-bottom: 45px;
+    padding-right: 10px;
+}
+#chatScreen #inputDiv {
+    width: 100%;
+    height: auto;
+    background: #333;
+    position: fixed;
+    padding: 0px 8px 8px 8px;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+#homeScreen {
+    width: 100%;
+    height: 100%;
+    background: #333;
+}
+#usernameTxt {
+    color: #fff;
+    font-size: 20px;
+    padding-left: 10px;
+}
+#profilePic {
+    width: 40px;
+    height: 40px;
+}
+
+#inputBack {
+    width: 85%;
+    background: #212121;
+    border-radius: 10px;
+    padding: 0 5px 0 5px;
+    display: flex;
+    align-items: center;
+}
+#emojiBack {
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #212111;
+}
+#emojiBack:hover {
+    background: #333;
+}
+#messageText {
+    width: 100%;
+    max-height: 120px;
+    resize: none;
+    outline: none;
+    padding: 15px 8px 15px 8px;
+    text-decoration: none;
+    font-size: 16px;
+    border: none;
+    color: #fff;
+    background: none;
+}
+#chatScreen #sendBtn {
+    width: 40px;
+    height: 40px;
+    background: #2096F3;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#chatScreen #sendBtn i {
+    color: #fff;
+}
+.chat-list-container {
+    margin-top: 10px;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    padding-left: 5px;
+    padding-right: 5px;
+    background: #333;
+    color: #fff;
+
+}
+.chat-list-container:hover {
+    background: #212121;
+}
+.profile-container {
+    width: 60px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile-pic {
+    width: 80%;
+    height: 80%;
+}
+.info-container {
+    width: calc(100% - 60px);
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 7px 0 7px 5px;
+}
+
+.name-container, .message-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.name-container {
+    font-size: 16px;
+    font-weight: 600;
+}
+.message-container {
+    font-size: 14px;
 }
 
 @keyframes animloader {
