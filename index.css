@@ -643,7 +643,7 @@ button:hover {
 }
 #messageDiv {
     width: 100%;
-    max-height: calc(100vh - 105px);
+    max-height: 100vh;
     background: #fff;
     padding-top: 60px;
     padding-left: 10px;

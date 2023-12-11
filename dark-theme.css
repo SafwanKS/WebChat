@@ -582,7 +582,7 @@ button:hover {
 }
 #messageDiv {
     width: 100%;
-    height: calc(100vh - 105px);
+    height: 100vh;
     background: #333;
     padding-top: 35px;
     padding-left: 10px;

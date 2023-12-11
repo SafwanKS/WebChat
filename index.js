@@ -354,6 +354,8 @@ window.onload = function() {
 
             profilePic.id = 'profilePic'
 
+            profilePic.src = 'profile.png'
+
             var url
 
             db.ref('users/' + userName).once('value',
@@ -366,7 +368,6 @@ window.onload = function() {
                     }
                     profilePic.src = url
                 })
-
 
             profilePic.onclick = () => {
                 const fileInput = document.createElement('input');
@@ -480,9 +481,11 @@ window.onload = function() {
 
             loader.setAttribute('class', 'loader')
 
-            loading_box.appendChild(loadingTxt)
+           // loading_box.appendChild(loadingTxt)
 
             loading_box.appendChild(loader)
+            
+            loadChats()
 
 
             searchBoxInput.addEventListener('input', function() {
@@ -496,8 +499,8 @@ window.onload = function() {
                     headDiv.style.display = 'flex';
                     globalChatBtn.style.display = 'block';
                     document.getElementById('userList').innerHTML = '';
-                    userlist.appendChild(noChatListDiv)
-
+                    loadChats()
+                    
                 }
 
                 clearTimeout(typingTimer);
@@ -578,9 +581,11 @@ window.onload = function() {
                         localStorage.setItem('screen', 'home')
                         headDiv.style.display = 'flex';
                         globalChatBtn.style.display = 'block';
-                        userlist.appendChild(noChatListDiv)
+                        
 
                         userlist.removeChild(loading_box)
+                        
+                        loadChats()
 
 
                     }
@@ -594,129 +599,136 @@ window.onload = function() {
 
 
             }
+            function loadChats() {
+                
+                userlist.appendChild(loading_box)
+                
+
+                const userId = localStorage.getItem('name')
+
+                const inboxRef = db.ref(`inbox/${userId}`)
+
+                inboxRef.on('value', snapshot => {
+
+                    var chatData = snapshot.val()
 
 
-            const userId = localStorage.getItem('name')
+                    if (chatData) {
 
-            const inboxRef = db.ref(`inbox/${userId}`)
+                        userlist.innerHTML = ''
 
-            inboxRef.on('value', snapshot => {
+                        snapshot.forEach(function(childSnapshot) {
 
-                var chatData = snapshot.val()
+                            const userData = childSnapshot.val()
+
+                            var username = childSnapshot.key
+
+                            var profileUrl
+
+                            var lastMessage = userData.last_message
+
+                            var chatListContainer = document.createElement('div')
+
+                            chatListContainer.classList.add('chat-list-container')
+
+                            var profileContainer = document.createElement('div')
+
+                            profileContainer.classList.add('profile-container')
+
+                            var infoContainer = document.createElement('div')
+
+                            infoContainer.classList.add('info-container')
+
+                            var nameContainer = document.createElement('div')
+
+                            nameContainer.classList.add('name-container')
+
+                            var messageContainer = document.createElement('div')
+
+                            messageContainer.classList.add('message-container')
+
+                            var profilePic = document.createElement('img')
+
+                            profilePic.classList.add('profile-pic')
+
+                            db.ref('users/' + username).once('value')
+                            .then(function(snapshot) {
+                                if (snapshot.val().profile != '') {
+                                    profileUrl = snapshot.val().profile
+                                } else {
+                                    profileUrl = 'profile.png'
+                                }
+
+                                profilePic.src = profileUrl
+                            })
+                            .catch(function(error) {
+                                console.log(error)
+                            })
 
 
-                if (chatData) {
+                            profileContainer.appendChild(profilePic)
 
-                    userlist.innerHTML = ''
+                            var usernameTxt = document.createElement('p')
 
-                    snapshot.forEach(function(childSnapshot) {
+                            usernameTxt.textContent = username
 
-                        const userData = childSnapshot.val()
+                            nameContainer.appendChild(usernameTxt)
 
-                        var username = childSnapshot.key
 
-                        var profileUrl
+                            var messageTxt = document.createElement('p')
 
-                        var lastMessage = userData.last_message
+                            messageTxt.textContent = lastMessage
 
-                        var chatListContainer = document.createElement('div')
+                            messageContainer.appendChild(messageTxt)
 
-                        chatListContainer.classList.add('chat-list-container')
+                            infoContainer.appendChild(nameContainer)
 
-                        var profileContainer = document.createElement('div')
+                            infoContainer.appendChild(messageContainer)
 
-                        profileContainer.classList.add('profile-container')
+                            chatListContainer.appendChild(profileContainer)
 
-                        var infoContainer = document.createElement('div')
+                            chatListContainer.appendChild(infoContainer)
 
-                        infoContainer.classList.add('info-container')
+                            userlist.appendChild(chatListContainer)
 
-                        var nameContainer = document.createElement('div')
-
-                        nameContainer.classList.add('name-container')
-
-                        var messageContainer = document.createElement('div')
-
-                        messageContainer.classList.add('message-container')
-
-                        var profilePic = document.createElement('img')
-
-                        profilePic.classList.add('profile-pic')
-                        
-                        db.ref('users/' + username).once('value')
-                        .then(function(snapshot) {
-                            if(snapshot.val().profile
-                             != ''){
-                                profileUrl = snapshot.val().profile
-                            }else{
-                                profileUrl = 'profile.png'
+                            chatListContainer.onclick = () => {
+                                parent.chat(username)
+                                window.history.pushState({
+                                    id: 3
+                                },
+                                    null,
+                                    `?q=chat/${username}`)
+                                localStorage.setItem('screen',
+                                    'chat')
                             }
-                            
-                            profilePic.src = profileUrl
+
+
                         })
-                        .catch(function(error) {
-                            console.log(error)
-                        })
+                    } else {
                         
+                        userlist.innerHTML = ''
 
-                        profileContainer.appendChild(profilePic)
+                        var noChatListDiv = document.createElement('div')
 
-                        var usernameTxt = document.createElement('p')
+                        noChatListDiv.id = 'noChatListDiv'
 
-                        usernameTxt.textContent = username
+                        var chatBubbleIcon = document.createElement('span')
 
-                        nameContainer.appendChild(usernameTxt)
+                        chatBubbleIcon.className = 'material-symbols-outlined'
 
+                        chatBubbleIcon.innerHTML = '&#xf189;'
 
-                        var messageTxt = document.createElement('p')
+                        var noChatHeadTxt = document.createElement('h4')
 
-                        messageTxt.textContent = lastMessage
+                        var noChatBodyTxt = document.createElement('p')
 
-                        messageContainer.appendChild(messageTxt)
+                        noChatListDiv.appendChild(chatBubbleIcon)
 
-                        infoContainer.appendChild(nameContainer)
+                        userlist.appendChild(noChatListDiv)
+                    }
+                })
 
-                        infoContainer.appendChild(messageContainer)
-
-                        chatListContainer.appendChild(profileContainer)
-
-                        chatListContainer.appendChild(infoContainer)
-
-                        userlist.appendChild(chatListContainer)
-
-                        chatListContainer.onclick = () => {
-                            parent.chat(username)
-                            window.history.pushState({
-                                id: 3
-                            }, null, `?q=chat/${username}`)
-                            localStorage.setItem('screen', 'chat')
-                        }
-
-
-                    })
-                } else {
-
-                    var noChatListDiv = document.createElement('div')
-
-                    noChatListDiv.id = 'noChatListDiv'
-
-                    var chatBubbleIcon = document.createElement('span')
-
-                    chatBubbleIcon.className = 'material-symbols-outlined'
-
-                    chatBubbleIcon.innerHTML = '&#xf189;'
-
-                    var noChatHeadTxt = document.createElement('h4')
-
-                    var noChatBodyTxt = document.createElement('p')
-
-                    noChatListDiv.appendChild(chatBubbleIcon)
-
-                    userlist.appendChild(noChatListDiv)
-                }
-            })
-
-
+            }
 
 
             headDiv.appendChild(logo)
@@ -1066,11 +1078,11 @@ window.onload = function() {
 
 
                     if (!(message.sender === sender)) {
-                         const recieverPic = document.createElement('img')
+                        const recieverPic = document.createElement('img')
                         recieverPic.src = sessionStorage.getItem('recieverPic')
                         chatContainer.appendChild(recieverPic)
                     }
-                    
+
                     chatContainer.appendChild(chatDetails);
 
                     messageList.appendChild(chatContainer);
