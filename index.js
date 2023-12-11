@@ -80,6 +80,10 @@ window.onload = function() {
 
             splashScreen.setAttribute('id',
                 'splashScreen')
+                
+                var logoContainer = document.createElement('div')
+                
+                logoContainer.classList.add('logo-container')
 
             var logo = document.createElement('img')
 
@@ -88,8 +92,10 @@ window.onload = function() {
 
             logo.setAttribute('src',
                 'logo.png')
+                
+                logoContainer.appendChild(logo)
 
-            splashScreen.appendChild(logo)
+            splashScreen.appendChild(logoContainer)
 
             document.body.appendChild(splashScreen)
         }
@@ -104,6 +110,10 @@ window.onload = function() {
 
             welcomeScreen.setAttribute('id',
                 'welcomeScreen')
+                
+                var logoContainer = document.createElement('div')
+                
+                logoContainer.classList.add('logo-container')
 
             var logo = document.createElement('img')
 
@@ -268,15 +278,17 @@ window.onload = function() {
 
             }
 
-            welcomeScreen.appendChild(logo)
+            logoContainer.appendChild(logo)
 
-            welcomeScreen.appendChild(welcomeText)
+            logoContainer.appendChild(welcomeText)
 
-            welcomeScreen.appendChild(welcome_subText)
+            logoContainer.appendChild(welcome_subText)
 
-            welcomeScreen.appendChild(inputName)
+            logoContainer.appendChild(inputName)
 
-            welcomeScreen.appendChild(join_btn)
+            logoContainer.appendChild(join_btn)
+            
+            welcomeScreen.appendChild(logoContainer)
 
             document.body.appendChild(welcomeScreen)
 
@@ -1500,6 +1512,8 @@ userlist.appendChild(noChatListDiv)
 
 
         refresh_chat() {
+            
+            var parent = this
 
             var chat_content_container = document.getElementById('globalMessagesDiv')
 
@@ -1605,6 +1619,10 @@ userlist.appendChild(noChatListDiv)
                             'message_user')
 
                         message_user.innerText = name;
+                        
+                        message_user.onclick = () => {
+                            parent.chat(name)
+                        }
 
                         if (localStorage.getItem('theme') == 'dark') {
 
@@ -1748,7 +1766,7 @@ userlist.appendChild(noChatListDiv)
             }
 
         },
-            4000);
+            2000);
 
 
         window.addEventListener("popstate",

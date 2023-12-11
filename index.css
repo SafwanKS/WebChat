@@ -49,13 +49,20 @@ body {
     align-items: center;*/
     background: #fff;
 }
-#logoImg {
-    width: 80px;
-    height: 80px;
-    position: absolute;
+.logo-container{
+        position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#logoImg {
+    width: 80px;
+    height: 80px;
+
 }
 #welcomeScreen {
     width: 100%;
