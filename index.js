@@ -25,6 +25,8 @@ window.onload = function() {
 
     var db = firebase.database()
 
+    var fst = firebase.storage()
+
 
     var userTheme;
 
@@ -80,10 +82,10 @@ window.onload = function() {
 
             splashScreen.setAttribute('id',
                 'splashScreen')
-                
-                var logoContainer = document.createElement('div')
-                
-                logoContainer.classList.add('logo-container')
+
+            var logoContainer = document.createElement('div')
+
+            logoContainer.classList.add('logo-container')
 
             var logo = document.createElement('img')
 
@@ -92,8 +94,8 @@ window.onload = function() {
 
             logo.setAttribute('src',
                 'logo.png')
-                
-                logoContainer.appendChild(logo)
+
+            logoContainer.appendChild(logo)
 
             splashScreen.appendChild(logoContainer)
 
@@ -110,10 +112,10 @@ window.onload = function() {
 
             welcomeScreen.setAttribute('id',
                 'welcomeScreen')
-                
-                var logoContainer = document.createElement('div')
-                
-                logoContainer.classList.add('logo-container')
+
+            var logoContainer = document.createElement('div')
+
+            logoContainer.classList.add('logo-container')
 
             var logo = document.createElement('img')
 
@@ -242,6 +244,9 @@ window.onload = function() {
 
                                         uid: randomUid,
 
+                                        online: true,
+
+                                        profile: '',
 
 
                                         theme: 'light',
@@ -287,7 +292,7 @@ window.onload = function() {
             logoContainer.appendChild(inputName)
 
             logoContainer.appendChild(join_btn)
-            
+
             welcomeScreen.appendChild(logoContainer)
 
             document.body.appendChild(welcomeScreen)
@@ -353,7 +358,67 @@ window.onload = function() {
 
             profilePic.id = 'profilePic'
 
-            profilePic.src = 'profile.png'
+            var url
+
+            db.ref('users/' + userName).once('value',
+                function(snapshot) {
+
+                    if (snapshot.val().profile != '') {
+                        url = snapshot.val().profile
+                    } else {
+                        url = 'profile.png'
+                    }
+                    profilePic.src = url
+                })
+
+
+            profilePic.onclick = () => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*'; // Restrict to image files
+                fileInput.style.display = 'none'; // Optional: hide the file input
+
+                // Add change event listener to the dynamically created file input
+                fileInput.addEventListener('change',
+                    function () {
+                        // Check if a file is selected
+                        if (fileInput.files.length > 0) {
+                            // Get the selected file
+                            const selectedFile = fileInput.files[0];
+
+                            var imageUrl;
+
+                            var storageRef = fst.ref('profile').child(selectedFile.name)
+
+                            storageRef.put(selectedFile).then(function(snapshot) {
+                                return snapshot.ref.getDownloadURL()
+                            }).then(function(downloadURL) {
+                                imageUrl = downloadURL
+
+                                profilePic.src = imageUrl
+                                return   db.ref('users/' + userName).set({
+                                profile: imageUrl
+                            })
+                            })
+                            .then(function(){
+                                console.log('url updated')
+                            })
+                            .catch(function(error) {
+                                alert(error)
+                            })
+
+                          
+
+                            document.body.removeChild(fileInput);
+                        }
+                    });
+
+                // Append the file input to the body
+                document.body.appendChild(fileInput);
+
+                // Trigger the dynamically created file input
+                fileInput.click();
+            }
 
             var homeBody = document.createElement('div')
 
@@ -473,7 +538,13 @@ window.onload = function() {
 
                                 var userData = childSnapshot.val();
                                 var userDisplayName = userData.name;
-                                var userProfile = userData.profile || 'profile.png';
+                                var userProfile
+                                
+                                if(userData.profile != ''){
+                                    userProfile = userData.profile
+                                } else{
+                                    userProfile = 'profile.png'
+                                }
 
                                 if (userDisplayName && userDisplayName.includes(inputValue)) {
                                     userFound = true
@@ -538,33 +609,50 @@ window.onload = function() {
             inboxRef.on('value', snapshot => {
 
                 var chatData = snapshot.val()
-                
+
                 console.log(chatData)
 
                 if (chatData) {
-                    
+
                     userlist.innerHTML = ''
 
                     snapshot.forEach(function(childSnapshot) {
+
                         const userData = childSnapshot.val()
+
                         var username = childSnapshot.key
+
                         var profileUrl
-                        if (userData.profile) {
-                            profileUrl = userData.profile
-                        } else {
-                            profileUrl = 'profile.png'
-                        }
+
+                        db.ref('users/' + username).once('value')
+                        .then(function(snapshot) {
+                            profileUrl = snapshot.val().profile
+                            console.log(profileUrl)
+                        })
+                        .catch(function(error) {
+                            console.log(error)
+                        })
+
                         var lastMessage = userData.last_message
+
                         var chatListContainer = document.createElement('div')
+
                         chatListContainer.classList.add('chat-list-container')
+
                         var profileContainer = document.createElement('div')
+
                         profileContainer.classList.add('profile-container')
+
                         var infoContainer = document.createElement('div')
+
                         infoContainer.classList.add('info-container')
 
                         var nameContainer = document.createElement('div')
+
                         nameContainer.classList.add('name-container')
+
                         var messageContainer = document.createElement('div')
+
                         messageContainer.classList.add('message-container')
 
                         var profilePic = document.createElement('img')
@@ -595,38 +683,38 @@ window.onload = function() {
                         chatListContainer.appendChild(profileContainer)
 
                         chatListContainer.appendChild(infoContainer)
-                        
+
                         userlist.appendChild(chatListContainer)
-                        
+
                         chatListContainer.onclick = () => {
                             parent.chat(username)
                             window.history.pushState({
-                    id: 3
-                }, null, `?q=chat/${username}`)
-                localStorage.setItem('screen', 'chat')
+                                id: 3
+                            }, null, `?q=chat/${username}`)
+                            localStorage.setItem('screen', 'chat')
                         }
 
 
                     })
                 } else {
-                    
-            var noChatListDiv = document.createElement('div')
 
-            noChatListDiv.id = 'noChatListDiv'
+                    var noChatListDiv = document.createElement('div')
 
-            var chatBubbleIcon = document.createElement('span')
+                    noChatListDiv.id = 'noChatListDiv'
 
-            chatBubbleIcon.className = 'material-symbols-outlined'
+                    var chatBubbleIcon = document.createElement('span')
 
-            chatBubbleIcon.innerHTML = '&#xf189;'
+                    chatBubbleIcon.className = 'material-symbols-outlined'
 
-            var noChatHeadTxt = document.createElement('h4')
+                    chatBubbleIcon.innerHTML = '&#xf189;'
 
-            var noChatBodyTxt = document.createElement('p')
+                    var noChatHeadTxt = document.createElement('h4')
 
-            noChatListDiv.appendChild(chatBubbleIcon)
+                    var noChatBodyTxt = document.createElement('p')
 
-userlist.appendChild(noChatListDiv)
+                    noChatListDiv.appendChild(chatBubbleIcon)
+
+                    userlist.appendChild(noChatListDiv)
                 }
             })
 
@@ -744,11 +832,24 @@ userlist.appendChild(noChatListDiv)
 
             profile.id = 'profilePic'
 
-            profile.setAttribute('src', 'profile.png')
+            var profileUrl
+
+            db.ref('users/'+recieverUsername).once('value', function(snapshot) {
+
+                if (snapshot.val().profile != '') {
+                    profileUrl = snapshot.val().profile
+                } else {
+                    profileUrl = 'profile.png'
+                }
+                profile.src = profileUrl
+            })
+
+
 
             var usernameTxt = document.createElement('p')
 
-            usernameTxt.setAttribute('id', 'usernameTxt')
+            usernameTxt.setAttribute('id',
+                'usernameTxt')
 
             usernameTxt.textContent = recieverUsername
 
@@ -758,7 +859,8 @@ userlist.appendChild(noChatListDiv)
 
             callBack.id = 'callBack'
 
-            callBack.setAttribute('class', 'modeBack')
+            callBack.setAttribute('class',
+                'modeBack')
 
             var callIcon = document.createElement('i')
 
@@ -822,14 +924,15 @@ userlist.appendChild(noChatListDiv)
 
             messageText.placeholder = 'Message...'
 
-            messageText.addEventListener('input', function() {
-                this.rows = this.value.split('\n').length;
-                if (this.value.trim().length > 0) {
-                    micIcon.textContent = 'send'
-                } else {
-                    micIcon.textContent = 'mic'
-                }
-            })
+            messageText.addEventListener('input',
+                function() {
+                    this.rows = this.value.split('\n').length;
+                    if (this.value.trim().length > 0) {
+                        micIcon.textContent = 'send'
+                    } else {
+                        micIcon.textContent = 'mic'
+                    }
+                })
 
             var sendBtn = document.createElement('div')
 
@@ -1512,7 +1615,7 @@ userlist.appendChild(noChatListDiv)
 
 
         refresh_chat() {
-            
+
             var parent = this
 
             var chat_content_container = document.getElementById('globalMessagesDiv')
@@ -1619,7 +1722,7 @@ userlist.appendChild(noChatListDiv)
                             'message_user')
 
                         message_user.innerText = name;
-                        
+
                         message_user.onclick = () => {
                             parent.chat(name)
                         }
@@ -1793,8 +1896,8 @@ userlist.appendChild(noChatListDiv)
 
                 localStorage.setItem('screen', 'home')
             }
-            
-                        if (screen == 'chat') {
+
+            if (screen == 'chat') {
 
                 app.home()
 
@@ -1832,12 +1935,6 @@ userlist.appendChild(noChatListDiv)
 
                         history.replaceState(null, null, window.location.href);
 
-                        for (var i = 1; i <= 10; i++) {
-                            history.back()
-                        }
-
-
-
                         document.body.innerHTML = 'Press Back again to exit~'
 
                     }
@@ -1850,6 +1947,14 @@ userlist.appendChild(noChatListDiv)
             }
 
         }
+
+        window.on('beforeunload',
+            function() {
+                var childRef = db.ref('activeUsers/'+ userName);
+
+                childRef.remove();
+
+            })
 
 
     }

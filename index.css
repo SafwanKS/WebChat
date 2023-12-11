@@ -24,6 +24,10 @@ body {
     height: 100%;
 
 }
+img{
+    border-radius: 50%;
+    object-fit: cover;
+}
 
 #backBtn {
     width: 40px;
