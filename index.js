@@ -396,18 +396,18 @@ window.onload = function() {
                                 imageUrl = downloadURL
 
                                 profilePic.src = imageUrl
-                                return   db.ref('users/' + userName).set({
-                                profile: imageUrl
+                                return db.ref('users/' + userName).update({
+                                    profile: imageUrl
+                                })
                             })
-                            })
-                            .then(function(){
+                            .then(function() {
                                 console.log('url updated')
                             })
                             .catch(function(error) {
                                 alert(error)
                             })
 
-                          
+
 
                             document.body.removeChild(fileInput);
                         }
@@ -539,12 +539,15 @@ window.onload = function() {
                                 var userData = childSnapshot.val();
                                 var userDisplayName = userData.name;
                                 var userProfile
-                                
-                                if(userData.profile != ''){
-                                    userProfile = userData.profile
-                                } else{
-                                    userProfile = 'profile.png'
+
+                                if (userData.profile !== undefined && userData.profile !== null && userData.profile !== '') {
+                                    userProfile = userData.profile;
+                                } else {
+                                    userProfile = 'profile.png';
                                 }
+
+                                console.log('userData:', userData); // Log the userData object
+                              //  console.log('userProfile:', userProfile); // Log the userProfile value
 
                                 if (userDisplayName && userDisplayName.includes(inputValue)) {
                                     userFound = true
