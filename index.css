@@ -811,7 +811,7 @@ button:hover {
     box-sizing: content-box;
 }
 .incoming .details p {
-    color: #333;
+    color: #fff;
     background: #2096F3;
     border-radius: 18px 18px 18px 0;
     box-sizing: content-box;
