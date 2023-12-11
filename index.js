@@ -314,12 +314,9 @@ window.onload = function() {
 
                     activeUsers.child(userName).set(true);
 
-                    console.log('Username uploaded successfully');
 
-                } else {
 
-                    console.log('Username already exists in activeUsers');
-                }
+                } else {}
             }).catch(function(error) {
 
                 console.error('Error checking/updating username:', error);
@@ -331,7 +328,6 @@ window.onload = function() {
 
             var parent = this
 
-            console.log(parent)
 
             var homeScreen = document.createElement('div')
 
@@ -400,9 +396,7 @@ window.onload = function() {
                                     profile: imageUrl
                                 })
                             })
-                            .then(function() {
-                                console.log('url updated')
-                            })
+                            .then(function() {})
                             .catch(function(error) {
                                 alert(error)
                             })
@@ -540,14 +534,11 @@ window.onload = function() {
                                 var userDisplayName = userData.name;
                                 var userProfile
 
-                                if (userData.profile !== undefined && userData.profile !== null && userData.profile !== '') {
+                                if (userData.profile !== '') {
                                     userProfile = userData.profile;
                                 } else {
                                     userProfile = 'profile.png';
                                 }
-
-                                console.log('userData:', userData); // Log the userData object
-                              //  console.log('userProfile:', userProfile); // Log the userProfile value
 
                                 if (userDisplayName && userDisplayName.includes(inputValue)) {
                                     userFound = true
@@ -613,7 +604,6 @@ window.onload = function() {
 
                 var chatData = snapshot.val()
 
-                console.log(chatData)
 
                 if (chatData) {
 
@@ -626,15 +616,6 @@ window.onload = function() {
                         var username = childSnapshot.key
 
                         var profileUrl
-
-                        db.ref('users/' + username).once('value')
-                        .then(function(snapshot) {
-                            profileUrl = snapshot.val().profile
-                            console.log(profileUrl)
-                        })
-                        .catch(function(error) {
-                            console.log(error)
-                        })
 
                         var lastMessage = userData.last_message
 
@@ -661,8 +642,22 @@ window.onload = function() {
                         var profilePic = document.createElement('img')
 
                         profilePic.classList.add('profile-pic')
-
-                        profilePic.src = profileUrl
+                        
+                        db.ref('users/' + username).once('value')
+                        .then(function(snapshot) {
+                            if(snapshot.val().profile
+                             != ''){
+                                profileUrl = snapshot.val().profile
+                            }else{
+                                profileUrl = 'profile.png'
+                            }
+                            
+                            profilePic.src = profileUrl
+                        })
+                        .catch(function(error) {
+                            console.log(error)
+                        })
+                        
 
                         profileContainer.appendChild(profilePic)
 
@@ -788,9 +783,7 @@ window.onload = function() {
 
             var udb = db.ref('users')
 
-            var chat1 = db.ref('chat1')
-
-            var chat2 = db.ref('chat2')
+            var chatRef = db.ref('chat')
 
             var idb = db.ref('inbox')
 
@@ -841,8 +834,10 @@ window.onload = function() {
 
                 if (snapshot.val().profile != '') {
                     profileUrl = snapshot.val().profile
+                    sessionStorage.setItem('recieverPic', profileUrl)
                 } else {
                     profileUrl = 'profile.png'
+                    sessionStorage.setItem('recieverPic', profileUrl)
                 }
                 profile.src = profileUrl
             })
@@ -953,28 +948,14 @@ window.onload = function() {
 
                     const messagePushTime = new Date();
 
-                    const sendMessage = {};
-
                     const sendInbox = {};
 
-                    const messagePushKey = chat1.push().key;
+                    const sender = localStorage.getItem('name');
+                    const receiver = recieverUsername;
+                    const messageContent = messageText.value;
 
-                    sendMessage.username = localStorage.getItem('name')
-
-                    sendMessage.push_time = String(messagePushTime.getTime());
-
-                    sendMessage.type = "MESSAGE";
-
-                    sendMessage.message = messageText.value;
-
-                    sendMessage.status = "SENT";
-
-                    sendMessage.key = messagePushKey;
-
-                    db.ref('chat1/' + messagePushKey).update(sendMessage)
-
-                    db.ref('chat2/' + messagePushKey).update(sendMessage)
-
+                    // Send the message to Firebase
+                    sendMessage(sender, receiver, messageContent);
 
                     sendInbox.firstuser = localStorage.getItem('name')
 
@@ -1007,11 +988,8 @@ window.onload = function() {
                 } else {}
             }
 
-            chat1.on('child_added', (snapshot) => {
-                const childValue = snapshot.val()
+            displayMessages(localStorage.getItem('name'), recieverUsername);
 
-                console.log(`username: ${childValue.username}, message: ${childValue.message}`);
-            })
 
 
             chatScreen.appendChild(aboutDiv)
@@ -1037,6 +1015,77 @@ window.onload = function() {
             chatWindowScreen.style.display = 'block'
 
             chatWindowScreen.appendChild(chatScreen)
+
+            displayMessages(localStorage.getItem('name'), recieverUsername);
+
+
+
+            function sendMessage(sender, receiver, message) {
+                const chatKey = generateChatKey(sender, receiver);
+                chatRef.child(chatKey).push({
+                    sender: sender,
+                    message: message,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+
+            function displayMessages(sender, receiver) {
+
+                const chatKey = generateChatKey(sender, receiver);
+
+                var messageList = document.getElementById('messageDiv')
+
+                chatRef.child(chatKey).on('child_added', function (snapshot) {
+
+                    const message = snapshot.val();
+
+                    const chatContainer = document.createElement('div');
+
+                    chatContainer.classList.add('chat');
+
+                    if (message.sender === sender) {
+
+                        chatContainer.classList.add('outgoing');
+
+                    } else {
+                        chatContainer.classList.add('incoming');
+
+                    }
+
+
+
+                    const chatDetails = document.createElement('div');
+
+                    chatDetails.classList.add('details');
+
+                    const chatMessage = document.createElement('p')
+
+                    chatMessage.textContent = `${message.message}`;
+
+                    chatDetails.appendChild(chatMessage)
+
+
+                    if (!(message.sender === sender)) {
+                         const recieverPic = document.createElement('img')
+                        recieverPic.src = sessionStorage.getItem('recieverPic')
+                        chatContainer.appendChild(recieverPic)
+                    }
+                    
+                    chatContainer.appendChild(chatDetails);
+
+                    messageList.appendChild(chatContainer);
+
+                    // Automatically scroll to the bottom when a new message is added
+                    messageList.scrollTop = messageList.scrollHeight;
+                });
+            }
+
+            function generateChatKey(sender, receiver) {
+                const users = [sender,
+                    receiver].sort();
+                return users.join('_');
+            }
+
 
 
         }
@@ -1922,7 +1971,7 @@ window.onload = function() {
 
             if (screen == 'home') {
 
-                console.log('yes')
+
 
                 var userName = localStorage.getItem('name')
 

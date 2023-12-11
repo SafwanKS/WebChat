@@ -13,7 +13,7 @@
 }
 
 html {
-    scroll-behaviour: smooth;
+    scroll-behavior: smooth;
 
 
 }
@@ -24,7 +24,7 @@ body {
     height: 100%;
 
 }
-img{
+img {
     border-radius: 50%;
     object-fit: cover;
 }
@@ -53,8 +53,8 @@ img{
     align-items: center;*/
     background: #fff;
 }
-.logo-container{
-        position: absolute;
+.logo-container {
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -557,7 +557,7 @@ button:hover {
 .userItem {
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    margin: 10px 5px 0 5px;
     background: #f1f1f1;
     border-radius: 30px;
 
@@ -645,11 +645,12 @@ button:hover {
     width: 100%;
     max-height: calc(100vh - 105px);
     background: #fff;
-    padding-top: 35px;
+    padding-top: 60px;
     padding-left: 10px;
     overflow-y: auto;
     padding-bottom: 45px;
     padding-right: 10px;
+    
 }
 #chatScreen #inputDiv {
     width: 100%;
@@ -767,6 +768,53 @@ button:hover {
 }
 .message-container {
     font-size: 14px;
+}
+
+#messageDiv .chat {
+    box-sizing: content-box;
+}
+#messageDiv .chat p {
+    word-wrap: break-word;
+    padding: 8px 16px;
+    box-sizing: content-box;
+}
+#messageDiv .outgoing {
+    display: flex;
+    box-sizing: content-box;
+}
+.outgoing .details {
+    max-width: 200px;
+    margin: 0 0 0 auto;
+    padding: 0;
+    box-sizing: content-box;
+}
+.outgoing .details p {
+    background: #f3f3f3;
+    color: #000;
+    border-radius: 18px 18px 0 18px;
+    box-sizing: content-box;
+}
+#messageDiv .incoming {
+    display: flex;
+    align-items: flex-end;
+    box-sizing: content-box;
+}
+#messageDiv .incoming img {
+    width: 35px;
+    height: 35px;
+    box-sizing: content-box;
+}
+.incoming .details {
+    margin-left: 10px;
+    margin-right: auto;
+    max-width: 200px;
+    box-sizing: content-box;
+}
+.incoming .details p {
+    color: #333;
+    background: #2096F3;
+    border-radius: 18px 18px 18px 0;
+    box-sizing: content-box;
 }
 @media only screen and (min-width: 768px) {
     body {

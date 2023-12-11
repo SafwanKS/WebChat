@@ -710,6 +710,53 @@ button:hover {
     font-size: 14px;
 }
 
+#messageDiv .chat {
+    box-sizing: content-box;
+}
+#messageDiv .chat p {
+    word-wrap: break-word;
+    padding: 8px 16px;
+    box-sizing: content-box;
+}
+#messageDiv .outgoing {
+    display: flex;
+    box-sizing: content-box;
+}
+.outgoing .details {
+    max-width: 200px;
+    margin: 0 0 0 auto;
+    padding: 0;
+    box-sizing: content-box;
+}
+.outgoing .details p {
+    background: #212121;
+    color: #fff;
+    border-radius: 18px 18px 0 18px;
+    box-sizing: content-box;
+}
+#messageDiv .incoming {
+    display: flex;
+    align-items: flex-end;
+    box-sizing: content-box;
+}
+#messageDiv .incoming img {
+    width: 35px;
+    height: 35px;
+    box-sizing: content-box;
+}
+.incoming .details {
+    margin-left: 10px;
+    margin-right: auto;
+    max-width: 200px;
+    box-sizing: content-box;
+}
+.incoming .details p {
+    color: #fff;
+    background: #2096F3;
+    border-radius: 18px 18px 18px 0;
+    box-sizing: content-box;
+}
+
 @keyframes animloader {
     0% {
         transform: scale(0);
