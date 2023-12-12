@@ -937,6 +937,10 @@ window.onload = function() {
             messageText.rows = 1
 
             messageText.placeholder = 'Message...'
+            
+            messageText.onfocus = function(){
+                 chatBox.scrollTop = chatBox.scrollHeight;
+            }
 
             messageText.addEventListener('input',
                 function() {

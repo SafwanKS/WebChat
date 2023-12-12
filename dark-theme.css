@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
 * {
-     box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
@@ -93,7 +93,7 @@ body {
     text-align: center;
     transition: text-align 0.3s ease;
 }
-#search-box:focus{
+#search-box:focus {
     text-align: left;
     transition: text-align 0.3s ease;
 }
@@ -519,7 +519,7 @@ button:hover {
 #globalChatTxt {
     color: #fff;
     font-size: 16px;
-    
+
 }
 .userItem {
     display: flex;
@@ -584,11 +584,12 @@ button:hover {
     width: 100%;
     height: 100vh;
     background: #333;
-    padding-top: 35px;
-    padding-left: 10px;
+    padding: 60px 10px 45px 10px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+#chatBox {
     overflow-y: auto;
-    padding-bottom: 45px;
-    padding-right: 10px;
 }
 #chatScreen #inputDiv {
     width: 100%;
@@ -784,14 +785,14 @@ button:hover {
         flex: 2;
         display: block;
     }
-    #noChatWindow{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
+    #noChatWindow {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
     #aboutDiv {
         position: relative;
         top: 0;
@@ -802,11 +803,11 @@ button:hover {
     #chatWindowScreen #inputDiv {
         width: 65%;
     }
-        #noChatOpenedBodyTxt{
-    color: grey;
-    text-align: center;
-    
-}
+    #noChatOpenedBodyTxt {
+        color: grey;
+        text-align: center;
+
+    }
     #inputTextBack {
         display: flex;
         align-items: center;
