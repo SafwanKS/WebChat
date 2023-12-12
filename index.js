@@ -1507,11 +1507,9 @@ window.onload = function() {
 
             var userName = this.get_name()
 
-            db.ref('users/' + userName).set({
+            db.ref('users/' + userName).update({
                 color: parent.userColor,
-                theme: theme,
-                blocked: false,
-                verified: false
+                theme: theme
             });
 
         }
