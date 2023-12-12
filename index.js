@@ -907,6 +907,10 @@ window.onload = function() {
             var messageDiv = document.createElement('div')
 
             messageDiv.id = 'messageDiv'
+            
+            var chatBox = document.createElement('div')
+            
+            chatBox.id = 'chatBox'
 
             var inputDiv = document.createElement('div')
 
@@ -1005,6 +1009,8 @@ window.onload = function() {
 
 
             chatScreen.appendChild(aboutDiv)
+            
+            messageDiv.appendChild(chatBox)
 
             chatScreen.appendChild(messageDiv)
 
@@ -1045,7 +1051,7 @@ window.onload = function() {
 
                 const chatKey = generateChatKey(sender, receiver);
 
-                var messageList = document.getElementById('messageDiv')
+                var messageList = document.getElementById('chatBox')
 
                 chatRef.child(chatKey).on('child_added', function (snapshot) {
 
