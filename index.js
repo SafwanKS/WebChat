@@ -27,6 +27,21 @@ window.onload = function() {
 
     var fst = firebase.storage()
 
+    var messaging = firebase.messaging();
+
+    messaging.requestPermission().then(function () {
+        console.log('Notification permission granted.');
+        return messaging.getToken();
+    }).then(function (token) {
+        console.log('FCM Token:', token);
+        // Save the token to your user data in the database if needed
+    }).catch(function (err) {
+        console.log('Unable to get permission to notify.', err);
+    });
+
+
+
+
 
     var userTheme;
 
@@ -481,10 +496,10 @@ window.onload = function() {
 
             loader.setAttribute('class', 'loader')
 
-           // loading_box.appendChild(loadingTxt)
+            // loading_box.appendChild(loadingTxt)
 
             loading_box.appendChild(loader)
-            
+
             loadChats()
 
 
@@ -500,7 +515,7 @@ window.onload = function() {
                     globalChatBtn.style.display = 'block';
                     document.getElementById('userList').innerHTML = '';
                     loadChats()
-                    
+
                 }
 
                 clearTimeout(typingTimer);
@@ -581,10 +596,10 @@ window.onload = function() {
                         localStorage.setItem('screen', 'home')
                         headDiv.style.display = 'flex';
                         globalChatBtn.style.display = 'block';
-                        
+
 
                         userlist.removeChild(loading_box)
-                        
+
                         loadChats()
 
 
@@ -600,9 +615,9 @@ window.onload = function() {
 
             }
             function loadChats() {
-                
+
                 userlist.appendChild(loading_box)
-                
+
 
                 const userId = localStorage.getItem('name')
 
@@ -705,7 +720,7 @@ window.onload = function() {
 
                         })
                     } else {
-                        
+
                         userlist.innerHTML = ''
 
                         var noChatListDiv = document.createElement('div')
@@ -792,6 +807,8 @@ window.onload = function() {
         }
 
         chat(userId) {
+
+            var parent = this
 
             var udb = db.ref('users')
 
@@ -907,9 +924,9 @@ window.onload = function() {
             var messageDiv = document.createElement('div')
 
             messageDiv.id = 'messageDiv'
-            
+
             var chatBox = document.createElement('div')
-            
+
             chatBox.id = 'chatBox'
 
             var inputDiv = document.createElement('div')
@@ -937,9 +954,9 @@ window.onload = function() {
             messageText.rows = 1
 
             messageText.placeholder = 'Message...'
-            
-            messageText.onfocus = function(){
-                 chatBox.scrollTop = chatBox.scrollHeight;
+
+            messageText.onfocus = function() {
+                chatBox.scrollTop = chatBox.scrollHeight;
             }
 
             messageText.addEventListener('input',
@@ -1013,7 +1030,7 @@ window.onload = function() {
 
 
             chatScreen.appendChild(aboutDiv)
-            
+
             messageDiv.appendChild(chatBox)
 
             chatScreen.appendChild(messageDiv)
@@ -1096,6 +1113,10 @@ window.onload = function() {
                     chatContainer.appendChild(chatDetails);
 
                     messageList.appendChild(chatContainer);
+
+                    if (message.sender !== sender) {
+                        parent.showNotification(message.sender, message.message);
+                    }
 
                     // Automatically scroll to the bottom when a new message is added
                     messageList.scrollTop = messageList.scrollHeight;
@@ -1572,7 +1593,6 @@ window.onload = function() {
 
                     parent.refresh_chat()
 
-                    // parent.sendNotificationToAll(message);
 
                 })
 
@@ -1683,7 +1703,25 @@ window.onload = function() {
         }
 
 
+        showNotification(sender, message) {
+            if (Notification.permission === 'granted') {
+                const options = {
+                    body: message,
+                    icon: 'logo.png' // Provide the path to your notification icon
+                };
 
+                const notification = new Notification(sender, options);
+
+                // Close the notification after a few seconds
+                setTimeout(notification.close.bind(notification), 5000);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === 'granted') {
+                        showNotification(sender, message);
+                    }
+                });
+            }
+        }
 
 
         refresh_chat() {
@@ -1942,6 +1980,22 @@ window.onload = function() {
 
         },
             2000);
+
+        messaging.onMessage(function (payload) {
+            console.log('Message received:', payload);
+
+            const {
+                title,
+                body
+            } = payload.notification;
+
+            // Show a notification for the incoming message
+            app.showNotification(title, body);
+
+            // Handle the message as needed (e.g., update the UI)
+        });
+
+
 
 
         window.addEventListener("popstate",
