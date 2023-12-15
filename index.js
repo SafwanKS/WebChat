@@ -38,8 +38,6 @@ window.onload = function() {
 
 
         constructor() {
-            
-            this.setupNotification()
 
             this.userColor = null;
 
@@ -1914,42 +1912,42 @@ window.onload = function() {
 
             }
 
-            setupNotification() {
 
-                if ('Notification' in window) {
-
-                    Notification.requestPermission().then(function(result) {
-                        if (result === 'granted') {
-
-                            db.ref('global_chat/chats').on('child_added', function(snapshot) {
-
-                                var notificationOptions = {
-                                    body: 'New Message',
-                                    icon: 'logo.png',
-                                    badge: 'badge.png',
-                                };
-
-                                var notification = new Notification('Global Chat', notificationOptions);
-
-                                notification.addEventListener('click', function() {
-                                    // Handle click event
-                                    console.log('Notification clicked');
-                                });
-
-                            })
-
-
-                        }
-                    })
-
-                }
-
-            }
 
 
 
 
         }
+
+
+        if ('Notification' in window) {
+
+            Notification.requestPermission().then(function(result) {
+                if (result === 'granted') {
+
+                    db.ref('global_chat/chats/').on('child_added', function(snapshot) {
+
+                        var notificationOptions = {
+                            body: 'New Message',
+                            icon: 'logo.png',
+                            badge: 'badge.png',
+                        };
+
+                        var notification = new Notification('Global Chat', notificationOptions);
+
+                        notification.addEventListener('click', function() {
+                            // Handle click event
+                            console.log('Notification clicked');
+                        });
+
+                    })
+
+
+                }
+            })
+
+        }
+
 
 
 
