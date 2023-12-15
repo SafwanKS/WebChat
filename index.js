@@ -27,18 +27,6 @@ window.onload = function() {
 
     var fst = firebase.storage()
 
-    var messaging = firebase.messaging();
-
-    messaging.requestPermission().then(function () {
-        console.log('Notification permission granted.');
-        return messaging.getToken();
-    }).then(function (token) {
-        console.log('FCM Token:', token);
-        // Save the token to your user data in the database if needed
-    }).catch(function (err) {
-        console.log('Unable to get permission to notify.', err);
-    });
-
 
 
 
@@ -1114,9 +1102,6 @@ window.onload = function() {
 
                     messageList.appendChild(chatContainer);
 
-                    if (message.sender !== sender) {
-                        parent.showNotification(message.sender, message.message);
-                    }
 
                     // Automatically scroll to the bottom when a new message is added
                     messageList.scrollTop = messageList.scrollHeight;
@@ -1703,26 +1688,6 @@ window.onload = function() {
         }
 
 
-        showNotification(sender, message) {
-            if (Notification.permission === 'granted') {
-                const options = {
-                    body: message,
-                    icon: 'logo.png' // Provide the path to your notification icon
-                };
-
-                const notification = new Notification(sender, options);
-
-                // Close the notification after a few seconds
-                setTimeout(notification.close.bind(notification), 5000);
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(function (permission) {
-                    if (permission === 'granted') {
-                        showNotification(sender, message);
-                    }
-                });
-            }
-        }
-
 
         refresh_chat() {
 
@@ -1947,6 +1912,35 @@ window.onload = function() {
 
             }
 
+            if ('Notification' in window) {
+
+                Notification.requestPermission()
+                .then(function(result) {
+                    if (result == 'granted') {
+
+                        db.ref('global_chat/chats').on('child_added', function(snapshot) {
+
+                            var notificationOptions = {
+                                body: 'New Message',
+                                icon: 'logo.png',
+                                badge: 'badge.png',
+                            };
+
+                            var notification = new Notification('Global Chat', notificationOptions);
+
+                            notification.addEventListener('click', function() {
+                                // Handle click event
+                                console.log('Notification clicked');
+                            });
+
+                        })
+
+
+                    }
+                })
+
+            }
+
 
 
 
@@ -1980,20 +1974,6 @@ window.onload = function() {
 
         },
             2000);
-
-        messaging.onMessage(function (payload) {
-            console.log('Message received:', payload);
-
-            const {
-                title,
-                body
-            } = payload.notification;
-
-            // Show a notification for the incoming message
-            app.showNotification(title, body);
-
-            // Handle the message as needed (e.g., update the UI)
-        });
 
 
 
