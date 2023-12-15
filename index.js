@@ -38,6 +38,8 @@ window.onload = function() {
 
 
         constructor() {
+            
+            this.setupNotification()
 
             this.userColor = null;
 
@@ -1912,32 +1914,35 @@ window.onload = function() {
 
             }
 
-            if ('Notification' in window) {
+            setupNotification() {
 
-                Notification.requestPermission()
-                .then(function(result) {
-                    if (result == 'granted') {
+                if ('Notification' in window) {
 
-                        db.ref('global_chat/chats').on('child_added', function(snapshot) {
+                    Notification.requestPermission().then(function(result) {
+                        if (result === 'granted') {
 
-                            var notificationOptions = {
-                                body: 'New Message',
-                                icon: 'logo.png',
-                                badge: 'badge.png',
-                            };
+                            db.ref('global_chat/chats').on('child_added', function(snapshot) {
 
-                            var notification = new Notification('Global Chat', notificationOptions);
+                                var notificationOptions = {
+                                    body: 'New Message',
+                                    icon: 'logo.png',
+                                    badge: 'badge.png',
+                                };
 
-                            notification.addEventListener('click', function() {
-                                // Handle click event
-                                console.log('Notification clicked');
-                            });
+                                var notification = new Notification('Global Chat', notificationOptions);
 
-                        })
+                                notification.addEventListener('click', function() {
+                                    // Handle click event
+                                    console.log('Notification clicked');
+                                });
+
+                            })
 
 
-                    }
-                })
+                        }
+                    })
+
+                }
 
             }
 
