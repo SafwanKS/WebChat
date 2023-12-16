@@ -1920,40 +1920,6 @@ window.onload = function() {
         }
 
 
-        if ('Notification' in window) {
-
-            Notification.requestPermission().then(function(result) {
-                if (result === 'granted') {
-                    
-                    var notification = new Notification('Test Notification', {
-    body: 'This is a test notification.'
-});
-
-                    db.ref('global_chat/chats').on('child_added', function(snapshot) {
-                        
-                        
-                        alert('new message')
-
-                        var notificationOptions = {
-                            body: 'New Message',
-                            icon: 'logo.png',
-                            badge: 'badge.png',
-                        };
-
-                        var notification = new Notification('Global Chat', notificationOptions);
-
-                        notification.addEventListener('click', function() {
-                            // Handle click event
-                            console.log('Notification clicked');
-                        });
-
-                    })
-
-
-                }
-            })
-
-        }
 
 
 
@@ -1984,6 +1950,43 @@ window.onload = function() {
 
         },
             2000);
+
+
+        if ('Notification' in window) {
+
+            Notification.requestPermission().then(function(result) {
+                if (result == 'granted') {
+
+                    var notification = new Notification('Test Notification', {
+                        body: 'This is a test notification.'
+                    });
+
+                    db.ref('global_chat/chats').on('child_added', function(snapshot) {
+
+
+                        alert('new message')
+
+                        var notificationOptions = {
+                            body: 'New Message',
+                            icon: 'logo.png',
+                            badge: 'badge.png',
+                        };
+
+                        var notification = new Notification('Global Chat', notificationOptions);
+
+                        notification.addEventListener('click', function() {
+                            // Handle click event
+                            console.log('Notification clicked');
+                        });
+
+                    })
+
+
+                }
+            })
+
+        }
+
 
 
 
