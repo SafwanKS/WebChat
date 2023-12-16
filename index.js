@@ -1924,8 +1924,15 @@ window.onload = function() {
 
             Notification.requestPermission().then(function(result) {
                 if (result === 'granted') {
+                    
+                    var notification = new Notification('Test Notification', {
+    body: 'This is a test notification.'
+});
 
                     db.ref('global_chat/chats').on('child_added', function(snapshot) {
+                        
+                        
+                        alert('new message')
 
                         var notificationOptions = {
                             body: 'New Message',
